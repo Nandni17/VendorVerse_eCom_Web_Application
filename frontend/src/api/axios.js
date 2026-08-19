@@ -1,7 +1,11 @@
 import axios from "axios";
 
+// const API = axios.create({
+//   baseURL: "http://localhost:8000",
+// });
+
 const API = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: "https://vendor-verse-e-com-web-application-9moy5lz5x.vercel.app",
 });
 
 API.interceptors.request.use((req) => {
