@@ -59,7 +59,7 @@ function SellerOrders() {
       setError("");
 
       const response = await API.put(
-        `/orders/${orderId}/status`,
+        `/api/orders/${orderId}/status`,
         {
           status: newStatus,
         }
