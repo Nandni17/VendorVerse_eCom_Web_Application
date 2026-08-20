@@ -43,11 +43,13 @@ exports.createCheckoutSession = async (req, res) => {
   mode: "payment",
 
   success_url:
-    "http://localhost:5173/order-success",
+    //"http://localhost:5173/order-success",
+    "https://vendor-verse-e-com-web-application.vercel.app/order-success",
 
 
   cancel_url:
-    "http://localhost:5173/payment-cancel",
+    //"http://localhost:5173/payment-cancel",
+    "https://vendor-verse-e-com-web-application.vercel.app/payment-cancel",
 
   metadata: {
     userId: req.user._id.toString(),
