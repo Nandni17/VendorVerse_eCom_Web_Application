@@ -44,12 +44,12 @@ exports.createCheckoutSession = async (req, res) => {
 
   success_url:
     //"http://localhost:5173/order-success",
-    "https://vendor-verse-e-com-web-application.vercel.app/order-success",
+    "https://vendor-verse-e-com-web-application-gqek-ik36q8xc0.vercel.app/order-success",
 
 
   cancel_url:
     //"http://localhost:5173/payment-cancel",
-    "https://vendor-verse-e-com-web-application.vercel.app/payment-cancel",
+    "https://vendor-verse-e-com-web-application-gqek-ik36q8xc0.vercel.app/payment-cancel",
 
   metadata: {
     userId: req.user._id.toString(),
