@@ -5,7 +5,7 @@ import axios from "axios";
 // });
 
 const API = axios.create({
-  baseURL: "https://vendor-verse-e-com-web-application-9moy5lz5x.vercel.app",
+  baseURL: "https://vendor-verse-e-com-web-application.vercel.app/",
 });
 
 API.interceptors.request.use((req) => {
