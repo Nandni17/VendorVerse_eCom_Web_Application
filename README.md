@@ -2,7 +2,7 @@
 
 **VendorVerse** is a full-stack multi-vendor e-commerce platform built using the **MERN stack**. It allows customers to browse and purchase products, sellers to manage their own products and orders, and administrators to manage the overall platform.
 
-The application includes authentication, role-based authorization, product management, cart and wishlist functionality, Stripe payments, order tracking, seller management, admin management, and customer contact messages.
+The application includes authentication, email verification, role-based authorization, product management, buyer-seller chat, cart and wishlist functionality, Stripe and Cash on Delivery payments, order tracking, profile management, image uploading with Cloudinary, reviews and ratings, seller management, admin management, and customer contact messages.
 
 ---
 
@@ -11,6 +11,8 @@ The application includes authentication, role-based authorization, product manag
 ### 👤 Customer Features
 
 * User registration and login
+* Email verification using OTP
+* Email verification emails using **Brevo**
 * Role-based authentication
 * Browse all products
 * View product details
@@ -22,12 +24,22 @@ The application includes authentication, role-based authorization, product manag
 * Wishlist functionality
 * Checkout system
 * Stripe payment integration
+* Cash on Delivery (COD) payment
 * Payment success and cancellation pages
-* Automatic order creation after successful payment
+* Automatic order creation after successful Stripe payment
 * Order history
 * Order details
 * Order status tracking
-* Cancel pending orders
+* Cancel eligible pending orders
+* Buyer ↔ Seller chat
+* Customer profile management
+* Update profile information
+* Profile image uploading
+* Cloudinary-based profile image storage
+* Product reviews and ratings
+* Verified Purchase reviews
+* Edit own reviews
+* Delete own reviews
 * Contact Us form
 * FAQ section
 * Events section
@@ -37,7 +49,7 @@ The application includes authentication, role-based authorization, product manag
 
 ### 🏪 Seller Features
 
-Sellers have their own dashboard and can manage their products and orders.
+Sellers have their own dashboard and can manage their products, orders, profile, and customer conversations.
 
 * Seller dashboard
 * Add products
@@ -52,6 +64,12 @@ Sellers have their own dashboard and can manage their products and orders.
 * Pending → Shipped → Delivered workflow
 * Seller-specific product authorization
 * Seller-specific order authorization
+* Buyer ↔ Seller chat
+* Communicate with customers through chat
+* Seller profile management
+* Update seller profile
+* Profile image uploading
+* Cloudinary image storage
 
 A seller can only manage products and orders that belong to them.
 
@@ -81,11 +99,139 @@ The admin account is not publicly registered. It is created and managed directly
 
 ---
 
+## 🔐 Authentication & Email Verification
+
+VendorVerse uses **JWT authentication** and role-based authorization.
+
+New users must verify their email during registration.
+
+### Email Verification Flow
+
+```text
+User Registration
+       ↓
+Verification OTP Generated
+       ↓
+Brevo Email Service
+       ↓
+OTP Sent to User Email
+       ↓
+User Enters OTP
+       ↓
+Email Verified
+       ↓
+Account Activated
+       ↓
+Login
+```
+
+This helps prevent unverified users from accessing the application.
+
+---
+
+## 💬 Buyer ↔ Seller Chat
+
+VendorVerse provides a buyer-seller communication system that allows customers to contact sellers directly.
+
+A buyer can start a conversation from the product details page.
+
+### Chat Flow
+
+```text
+Buyer
+   ↓
+Product Details
+   ↓
+Chat with Seller
+   ↓
+Conversation Created
+   ↓
+Buyer ↔ Seller Messages
+```
+
+The conversation is associated with the relevant product and seller, allowing buyers and sellers to communicate about products and orders.
+
+---
+
+## 👤 Profile Management
+
+VendorVerse provides profile management for users.
+
+Users can:
+
+* View their profile
+* Update profile information
+* Upload a profile image
+* Replace their existing profile image
+* Store profile images securely using Cloudinary
+
+### Profile Image Upload Flow
+
+```text
+User
+  ↓
+Select Image
+  ↓
+Multer
+  ↓
+Cloudinary
+  ↓
+Image URL
+  ↓
+MongoDB User Profile
+```
+
+**Multer** is used to handle image uploads on the backend, while **Cloudinary** is used for cloud-based image storage.
+
+---
+
+## ⭐ Reviews & Ratings
+
+VendorVerse includes a complete product reviews and ratings system.
+
+Customers can review a product **only after purchasing and receiving the product**.
+
+### Review Features
+
+* Submit product reviews
+* Give 1–5 star ratings
+* Verified Purchase badge
+* Display average product rating
+* Display total review count
+* Edit own reviews
+* Delete own reviews
+* Review ownership validation
+* Prevent unauthorized users from editing reviews
+* Prevent unauthorized users from deleting reviews
+* Prevent users from reviewing products they have not purchased and received
+
+### Review Flow
+
+```text
+Customer
+   ↓
+Purchase Product
+   ↓
+Order Delivered
+   ↓
+Review Product
+   ↓
+Verified Purchase ✓
+   ↓
+Rating + Comment
+   ↓
+Product Rating Updated
+```
+
+Reviews are linked to the authenticated customer and product. Users can only edit or delete their own reviews.
+
+---
+
 ## 💳 Payment System
 
-VendorVerse uses **Stripe** for online payments.
+VendorVerse supports both **Stripe online payments** and **Cash on Delivery (COD)**.
 
-Payment flow:
+### Stripe Payment Flow
 
 ```text
 Customer
@@ -108,7 +254,31 @@ Stock Reduced
 My Orders
 ```
 
-Stripe webhooks are used to verify successful payments and create orders securely on the backend.
+Stripe webhooks are used to verify successful payments and securely create orders on the backend.
+
+### Cash on Delivery Flow
+
+```text
+Customer
+   ↓
+Checkout
+   ↓
+Select COD
+   ↓
+Place Order
+   ↓
+Order Created
+   ↓
+Seller Processes Order
+   ↓
+Shipped
+   ↓
+Delivered
+   ↓
+Customer Receives Product
+```
+
+COD orders are managed through the same order tracking system and seller order workflow.
 
 ---
 
@@ -139,6 +309,8 @@ Seller B Order
 
 This allows each seller to manage only their own orders.
 
+Both **Stripe-paid orders and COD orders** are supported.
+
 ---
 
 ## 🔐 Authentication & Authorization
@@ -157,21 +329,34 @@ Admin
 
 Can:
 
+* Register and verify email
 * Shop products
 * Manage cart
 * Manage wishlist
-* Checkout
+* Checkout using Stripe or COD
 * View own orders
 * Cancel eligible orders
+* Chat with sellers
+* Manage profile
+* Upload profile image
+* Submit product reviews
+* Edit own reviews
+* Delete own reviews
 
 ### Seller
 
 Can:
 
 * Manage own products
+* Add products
+* Edit products
+* Delete products
 * View own orders
 * Update own order statuses
 * View seller dashboard
+* Chat with buyers
+* Manage profile
+* Upload profile image
 
 ### Admin
 
@@ -206,11 +391,24 @@ Protected routes prevent unauthorized users from accessing restricted pages.
 * Mongoose
 * JWT
 * bcryptjs
+* Multer
+
+### Authentication & Email
+
+* JWT Authentication
+* Brevo Email Service
+* Email OTP Verification
 
 ### Payment
 
 * Stripe
 * Stripe Webhooks
+* Cash on Delivery (COD)
+
+### Image Storage
+
+* Cloudinary
+* Multer
 
 ### Database
 
@@ -290,6 +488,22 @@ JWT_SECRET=your_jwt_secret
 STRIPE_SECRET_KEY=your_stripe_secret_key
 
 STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+
+EMAIL_HOST=your_email_host
+
+EMAIL_PORT=your_email_port
+
+EMAIL_USER=your_email_user
+
+EMAIL_PASS=your_email_password
+
+BREVO_API_KEY=your_brevo_api_key
+
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 ```
 
 Start the backend:
@@ -345,21 +559,24 @@ Main collections include:
 Users
 Products
 Orders
+Reviews
+Conversations
+Messages
 Hero Banners
 Contact Messages
 ```
 
-MongoDB Atlas stores customer, seller, product, order, and contact information.
+MongoDB Atlas stores customer, seller, profile, product, order, review, chat, and contact information.
 
 ---
 
 ## 🔑 User Roles
 
-| Role   | Access                                     |
-| ------ | ------------------------------------------ |
-| Buyer  | Shopping, Cart, Wishlist, Checkout, Orders |
-| Seller | Products, Inventory, Seller Orders, Sales  |
-| Admin  | Platform-wide management                   |
+| Role   | Access |
+| ------ | ------ |
+| Buyer  | Shopping, Cart, Wishlist, Checkout, Orders, Chat, Reviews, Profile |
+| Seller | Products, Inventory, Seller Orders, Sales, Chat, Profile |
+| Admin  | Platform-wide management |
 
 ---
 
@@ -371,15 +588,27 @@ The application was tested using:
 * Postman API testing
 * MongoDB Atlas verification
 * Stripe test payments
+* Cash on Delivery testing
 * Authentication and protected-route testing
+* Email OTP verification testing
 * Buyer workflow testing
 * Seller CRUD testing
+* Buyer ↔ Seller chat testing
+* Profile management testing
+* Profile image upload testing
+* Cloudinary image storage testing
+* Product reviews and ratings testing
+* Verified Purchase validation
+* Review ownership validation
+* Seller authorization testing
 * Admin management testing
 
 ### Customer Flow
 
 ```text
 Register
+   ↓
+Email OTP Verification
    ↓
 Login
    ↓
@@ -390,19 +619,24 @@ Product Details
 Wishlist / Cart
    ↓
 Checkout
-   ↓
-Stripe
-   ├── Success
+   ├── Stripe
+   │     ↓
+   │   Payment
    │     ↓
    │   Order Created
-   │     ↓
-   │   My Orders
-   │     ↓
-   │   Order Details
    │
-   └── Cancel
+   └── COD
          ↓
-      Checkout
+      Order Created
+
+   ↓
+My Orders
+   ↓
+Order Delivered
+   ↓
+Review & Rating
+   ↓
+Verified Purchase ✓
 ```
 
 ### Seller Flow
@@ -421,6 +655,10 @@ Inventory
 Seller Orders
      ↓
 Update Status
+     ↓
+Chat with Buyers
+     ↓
+Manage Profile
 ```
 
 ### Admin Flow
@@ -446,13 +684,17 @@ The application includes:
 
 * JWT-based authentication
 * Password hashing using bcrypt
+* Email OTP verification
 * Role-based authorization
 * Protected frontend routes
 * Protected backend APIs
 * Seller ownership validation
 * Buyer order ownership validation
+* Review ownership validation
+* Verified Purchase validation
 * Stock validation before ordering
 * Stripe webhook verification
+* Secure image storage using Cloudinary
 * Environment variables for sensitive credentials
 
 > Never commit `.env` files or secret API keys to GitHub.
@@ -471,7 +713,7 @@ The production deployment architecture is planned as:
                            │
                            ↓
                     ┌──────────────┐
-                    │    Railway   │
+                    │   Vercel     │
                     │   Backend    │
                     └──────┬───────┘
                            │
@@ -479,6 +721,10 @@ The production deployment architecture is planned as:
              ↓                           ↓
       MongoDB Atlas                  Stripe
        Cloud Database                Payments
+             │
+             ↓
+         Cloudinary
+       Image Storage
 ```
 
 Production environment variables should be configured through the hosting platforms rather than committed to the repository.
@@ -489,14 +735,14 @@ Production environment variables should be configured through the hosting platfo
 
 Possible future improvements include:
 
-* Product reviews and ratings
 * Advanced product search
 * Seller analytics
-* Email notifications
+* Email order notifications
 * Order delivery notifications
-* Product image upload storage
 * Advanced admin analytics
 * Coupon and discount system
+* Product recommendation system
+* Advanced real-time chat notifications
 
 ---
 
@@ -504,7 +750,7 @@ Possible future improvements include:
 
 **Nandni Kumari**
 
-Software Engineering Student
+Software Engineering Student  
 Full-Stack Web Development Project
 
 ---
