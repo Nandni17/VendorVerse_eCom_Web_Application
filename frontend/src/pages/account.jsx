@@ -1,31 +1,48 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import API from "../api/axios";
 
 function Account() {
-
   const navigate = useNavigate();
 
-  const user = JSON.parse(
-    localStorage.getItem("user")
-  );
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await API.get("/api/users/profile");
+        setProfile(response.data);
+      } catch (err) {
+        console.error("Unable to load profile:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   const handleLogout = () => {
-
     localStorage.removeItem("user");
-
     navigate("/login");
-
     window.location.reload();
   };
 
+  // =========================
+  // NOT LOGGED IN
+  // =========================
 
-  // If user somehow visits /account without login
   if (!user) {
-
     return (
       <main className="account-page">
-
         <div className="account-container">
 
           <div className="account-icon-large">
@@ -52,39 +69,66 @@ function Account() {
           </button>
 
         </div>
-
       </main>
     );
   }
 
+  if (loading) {
+    return (
+      <main className="account-page">
+        <div className="account-container">
+          <p>Loading profile...</p>
+        </div>
+      </main>
+    );
+  }
+
+  const isSeller = user.role === "seller";
+  const isAdmin = user.role === "admin";
 
   return (
-
     <main className="account-page">
 
       <div className="account-container">
 
-
-        {/* HEADER */}
+        {/* =========================
+            HEADER
+        ========================= */}
 
         <div className="account-header">
 
           <div className="account-icon-large">
-            👤
-          </div>
+  {profile?.profileImage ? (
+    <img
+      src={profile.profileImage}
+      alt="Profile"
+      className="account-profile-image"
+    />
+  ) : (
+    isAdmin ? "🛡️" : isSeller ? "🏪" : "👤"
+  )}
+</div>
 
           <div>
 
             <p className="account-eyebrow">
-              VENDORVERSE ACCOUNT
+              VENDORVERSE {isAdmin ? "ADMIN" : isSeller ? "SELLER" : "ACCOUNT"}
             </p>
 
             <h1>
-              My Account
+              {isAdmin
+                ? "Admin Account"
+                : isSeller
+                ? "Seller Account"
+                : "My Account"}
             </h1>
 
             <p>
-              Manage your profile, orders and wishlist.
+              {isAdmin
+                ? "Manage your admin profile and marketplace."
+                : isSeller
+                ? "Manage your seller profile and marketplace activity."
+                : "Manage your profile, orders and wishlist."}
             </p>
 
           </div>
@@ -92,7 +136,9 @@ function Account() {
         </div>
 
 
-        {/* PROFILE */}
+        {/* =========================
+            PERSONAL INFORMATION
+        ========================= */}
 
         <section className="account-card">
 
@@ -108,154 +154,341 @@ function Account() {
               </h2>
             </div>
 
-            <span className="card-icon">
+             <button
+    type="button"
+    className="edit-profile-button"
+    onClick={() => navigate("/edit-profile")}
+  >
+    ✏️ Edit Profile
+  </button>
+
+            {/* <span className="card-icon">
               👤
-            </span>
+            </span> */}
 
           </div>
-
 
           <div className="profile-info">
 
             <div className="profile-item">
-
-              <span>
-                Name
-              </span>
-
+              <span>Name</span>
               <strong>
-                {user.name}
+                {profile?.name || user.name}
               </strong>
-
             </div>
 
-
             <div className="profile-item">
-
-              <span>
-                Email
-              </span>
-
+              <span>Email</span>
               <strong>
-                {user.email}
+                {profile?.email || user.email}
               </strong>
-
             </div>
 
-
             <div className="profile-item">
-
-              <span>
-                Account Type
-              </span>
-
+              <span>Account Type</span>
               <strong className="role-badge">
                 {user.role || "buyer"}
               </strong>
-
             </div>
+
+            {profile?.phone && (
+              <div className="profile-item">
+                <span>Phone</span>
+                <strong>
+                  {profile.phone}
+                </strong>
+              </div>
+            )}
+
+            {profile?.city && (
+              <div className="profile-item">
+                <span>City</span>
+                <strong>
+                  {profile.city}
+                </strong>
+              </div>
+            )}
+
+            {profile?.address && (
+  <div className="profile-item address-item">
+                <span>Address</span>
+                <strong>
+                  {profile.address}
+                </strong>
+              </div>
+            )}
 
           </div>
 
         </section>
 
 
-        {/* ACCOUNT OPTIONS */}
+        {/* =================================================
+            BUYER ACCOUNT OPTIONS
+        ================================================= */}
 
-        <section className="account-options">
+        {user.role === "buyer" && (
 
+          <section className="account-options">
 
-          {/* ORDERS */}
+            {/* MY ORDERS */}
 
-          <button
-            className="account-option"
-            onClick={() => navigate("/orders")}
-          >
+            <button
+              className="account-option"
+              onClick={() => navigate("/orders")}
+            >
 
-            <div className="option-icon">
-              📦
-            </div>
+              <div className="option-icon">
+                📦
+              </div>
 
-            <div className="option-content">
+              <div className="option-content">
 
-              <h3>
-                My Orders
-              </h3>
+                <h3>
+                  My Orders
+                </h3>
 
-              <p>
-                View your previous and current orders.
-              </p>
+                <p>
+                  View your previous and current orders.
+                </p>
 
-            </div>
+              </div>
 
-            <span className="option-arrow">
-              →
-            </span>
+              <span className="option-arrow">
+                →
+              </span>
 
-          </button>
-
-
-          {/* WISHLIST */}
-
-          <button
-            className="account-option"
-            onClick={() => navigate("/wishlist")}
-          >
-
-            <div className="option-icon">
-              ♡
-            </div>
-
-            <div className="option-content">
-
-              <h3>
-                My Wishlist
-              </h3>
-
-              <p>
-                View products you saved for later.
-              </p>
-
-            </div>
-
-            <span className="option-arrow">
-              →
-            </span>
-
-          </button>
+            </button>
 
 
-          {/* LOGOUT */}
+            {/* WISHLIST */}
 
-          <button
-            className="account-option logout-option"
-            onClick={handleLogout}
-          >
+            <button
+              className="account-option"
+              onClick={() => navigate("/wishlist")}
+            >
 
-            <div className="option-icon">
-              ↪
-            </div>
+              <div className="option-icon">
+                ♡
+              </div>
 
-            <div className="option-content">
+              <div className="option-content">
 
-              <h3>
-                Logout
-              </h3>
+                <h3>
+                  My Wishlist
+                </h3>
 
-              <p>
-                Sign out of your VendorVerse account.
-              </p>
+                <p>
+                  View products you saved for later.
+                </p>
 
-            </div>
+              </div>
 
-            <span className="option-arrow">
-              →
-            </span>
+              <span className="option-arrow">
+                →
+              </span>
 
-          </button>
+            </button>
+
+            {/* LOGOUT */}
+
+            <button
+              className="account-option logout-option"
+              onClick={handleLogout}
+            >
+
+              <div className="option-icon">
+                ↪
+              </div>
+
+              <div className="option-content">
+
+                <h3>
+                  Logout
+                </h3>
+
+                <p>
+                  Sign out of your VendorVerse account.
+                </p>
+
+              </div>
+
+              <span className="option-arrow">
+                →
+              </span>
+
+            </button>
+
+          </section>
+
+        )}
 
 
-        </section>
+        {/* =================================================
+    SELLER ACCOUNT OPTIONS
+================================================= */}
+
+{user.role === "seller" && (
+
+  <section className="account-options">
+
+     {/* SELLER DASHBOARD */}
+
+<button
+  className="account-option"
+  onClick={() => navigate("/seller")}
+>
+  <div className="option-icon">
+    📊
+  </div>
+
+  <div className="option-content">
+    <h3>
+      Seller Dashboard
+    </h3>
+
+    <p>
+      Manage your products, orders and sales.
+    </p>
+  </div>
+
+  <span className="option-arrow">
+    →
+  </span>
+</button>
+
+    {/* MESSAGES */}
+
+    <button
+      className="account-option"
+      onClick={() => navigate("/conversations")}
+    >
+
+      <div className="option-icon">
+        💬
+      </div>
+
+      <div className="option-content">
+
+        <h3>
+          Messages
+        </h3>
+
+        <p>
+          Chat with buyers about your products and orders.
+        </p>
+
+      </div>
+
+      <span className="option-arrow">
+        →
+      </span>
+
+    </button>
+
+
+    {/* LOGOUT */}
+
+    <button
+      className="account-option logout-option"
+      onClick={handleLogout}
+    >
+
+      <div className="option-icon">
+        ↪
+      </div>
+
+      <div className="option-content">
+
+        <h3>
+          Logout
+        </h3>
+
+        <p>
+          Sign out of your VendorVerse account.
+        </p>
+
+      </div>
+
+      <span className="option-arrow">
+        →
+      </span>
+
+    </button>
+
+  </section>
+
+)}
+
+        {/* =================================================
+            ADMIN ACCOUNT OPTIONS
+        ================================================= */}
+
+        {user.role === "admin" && (
+
+          <section className="account-options">
+
+            {/* ADMIN DASHBOARD */}
+
+            <button
+              className="account-option"
+              onClick={() => navigate("/admin")}
+            >
+
+              <div className="option-icon">
+                🛡️
+              </div>
+
+              <div className="option-content">
+
+                <h3>
+                  Admin Dashboard
+                </h3>
+
+                <p>
+                  Manage users, sellers, products, orders and payments.
+                </p>
+
+              </div>
+
+              <span className="option-arrow">
+                →
+              </span>
+
+            </button>
+
+            {/* LOGOUT */}
+
+            <button
+              className="account-option logout-option"
+              onClick={handleLogout}
+            >
+
+              <div className="option-icon">
+                ↪
+              </div>
+
+              <div className="option-content">
+
+                <h3>
+                  Logout
+                </h3>
+
+                <p>
+                  Sign out of your VendorVerse account.
+                </p>
+
+              </div>
+
+              <span className="option-arrow">
+                →
+              </span>
+
+            </button>
+
+          </section>
+
+        )}
 
       </div>
 

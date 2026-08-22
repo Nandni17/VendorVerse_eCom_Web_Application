@@ -19,13 +19,19 @@ app.get("/", (req, res) => {
 // Routes
 const authRoutes = require("./routes/authRoutes");
 app.use("/api/auth", authRoutes);
+const userRoutes = require("./routes/userRoutes");
+app.use("/api/users", userRoutes);
 const contactRoutes = require("./routes/contactRoutes");
 app.use("/api/contact",contactRoutes);
 const productRoutes = require("./routes/productRoutes");
 app.use("/api/products", productRoutes);
 const orderRoutes = require("./routes/orderRoutes");
 app.use("/api/orders", orderRoutes);
+const chatRoutes = require("./routes/chatRoutes");
+app.use("/api/chat", chatRoutes);
 app.use("/api/payment", paymentRoutes);
+const reviewRoutes = require("./routes/reviewRoutes");
+app.use("/api/reviews", reviewRoutes);
 const heroBannerRoutes = require("./routes/heroBannerRoutes");
 app.use("/api/hero-banners", heroBannerRoutes);
 const adminRoutes = require("./routes/adminRoutes");

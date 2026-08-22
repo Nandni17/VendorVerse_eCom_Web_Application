@@ -116,7 +116,7 @@ function ProductCard({ product }) {
 
         <div className="product-rating">
 
-          ⭐ {product.rating || "4.8"}
+          ⭐ {Number(product.rating || 0).toFixed(1)}
 
           <span>
             ({product.numReviews || 0})

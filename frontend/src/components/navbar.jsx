@@ -1,4 +1,5 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import API from "../api/axios";
 import {
   Link,
   useNavigate,
@@ -12,6 +13,7 @@ function Navbar() {
 
   const [showAccountMenu, setShowAccountMenu] =
     useState(false);
+    const [profileImage, setProfileImage] = useState("");
 
   // =========================
   // AUTH USER
@@ -33,6 +35,30 @@ function Navbar() {
 
     localStorage.removeItem("user");
   }
+
+useEffect(() => {
+  const fetchProfileImage = async () => {
+    if (!user) {
+      setProfileImage("");
+      return;
+    }
+
+    try {
+      const response = await API.get("/api/users/profile");
+
+      setProfileImage(
+        response.data.profileImage || ""
+      );
+    } catch (error) {
+      console.error(
+        "Unable to load profile image:",
+        error
+      );
+    }
+  };
+
+  fetchProfileImage();
+}, []);
 
   // =========================
   // CART + WISHLIST
@@ -190,14 +216,22 @@ function Navbar() {
           <div className="account-wrapper">
 
             <button
-              type="button"
-              className="account-button"
-              onClick={handleAccountClick}
-              aria-label="Account"
-              aria-expanded={showAccountMenu}
-            >
-              👤
-            </button>
+  type="button"
+  className="account-button"
+  onClick={handleAccountClick}
+  aria-label="Account"
+  aria-expanded={showAccountMenu}
+>
+  {profileImage ? (
+    <img
+      src={profileImage}
+      alt="Profile"
+      className="navbar-profile-image"
+    />
+  ) : (
+    "👤"
+  )}
+</button>
 
 
             {/* =========================
@@ -232,7 +266,7 @@ function Navbar() {
                   👤 My Account
                 </button>
 
-                <button
+                {/* <button
   type="button"
   onClick={() => {
     setShowAccountMenu(false);
@@ -240,7 +274,7 @@ function Navbar() {
   }}
 >
   📦 My Orders
-</button>
+</button> */}
 
                 {/* LOGOUT */}
 

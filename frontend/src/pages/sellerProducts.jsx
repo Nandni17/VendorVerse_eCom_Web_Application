@@ -45,9 +45,7 @@ function SellerProducts() {
   }
 
   try {
-    await API.delete(
-      `/products/${productId}`
-    );
+    await API.delete(`/api/products/${productId}`);
 
     // Remove from UI immediately
     setProducts((prevProducts) =>
@@ -134,6 +132,13 @@ function SellerProducts() {
       <section className="seller-products-header">
 
         <div>
+
+            <Link
+            to="/seller"
+            className="seller-orders-back"
+          >
+            ← Seller Dashboard
+          </Link>
 
           <p className="section-eyebrow">
             SELLER CENTER

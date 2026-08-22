@@ -25,36 +25,69 @@ function Register() {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      setLoading(true);
-      setError("");
+  try {
+    setLoading(true);
+    setError("");
 
-      const response = await API.post("/api/auth/register", {
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-      role: formData.role,
+    const response = await API.post(
+      "/api/auth/register",
+      {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: formData.role,
+      }
+    );
+
+    alert(
+      "Verification code sent to your email!"
+    );
+
+    navigate("/verify-email", {
+      state: {
+        email: formData.email,
+      },
     });
 
-      alert("Registration successful! Please login.");
+  } catch (err) {
 
-      navigate("/login");
+    console.error(
+      "Registration error:",
+      err
+    );
 
-    } catch (err) {
-      console.error("Registration error:", err);
+    // If account exists but is not verified,
+    // backend also sends requiresVerification.
+    if (
+      err.response?.data
+        ?.requiresVerification
+    ) {
 
-      setError(
-        err.response?.data?.message ||
-        "Registration failed."
-      );
+      navigate("/verify-email", {
+        state: {
+          email:
+            err.response.data.email ||
+            formData.email,
+        },
+      });
 
-    } finally {
-      setLoading(false);
+      return;
     }
-  };
+
+    setError(
+      err.response?.data?.message ||
+        "Registration failed."
+    );
+
+  } finally {
+
+    setLoading(false);
+
+  }
+};
 
   return (
     <main className="auth-page">

@@ -17,7 +17,11 @@ import Checkout from "../pages/checkout";
 import Wishlist from "../pages/wishlist";
 import Login from "../pages/login";
 import Register from "../pages/register";
+import Chat from "../pages/chat";
+import Conversations from "../pages/Conversations";
+import VerifyEmail from "../pages/VerifyEmail";
 import Account from "../pages/account";
+import EditProfile from "../pages/EditProfile";
 import Contact from "../pages/contact";
 import Events from "../pages/events";
 import FAQ from "../pages/faq";
@@ -112,6 +116,16 @@ function AppRoutes() {
           element={<OrderDetails />}
         />
 
+         <Route
+    path="/chat/:conversationId"
+    element={<Chat />}
+  />
+
+  <Route
+  path="/conversations"
+  element={<Conversations />}
+/>
+
           {/* Wishlist */}
         <Route
           path="/wishlist"
@@ -123,6 +137,11 @@ function AppRoutes() {
           path="/account"
           element={<Account />}
         />
+
+        <Route
+  path="/edit-profile"
+  element={<EditProfile />}
+/>
 
          {/* Order Success */}
         <Route
@@ -149,6 +168,11 @@ function AppRoutes() {
           path="/register"
           element={<Register />}
         />
+
+        <Route
+  path="/verify-email"
+  element={<VerifyEmail />}
+/>
 
         //seller routes
         <Route

@@ -59,10 +59,25 @@ function Login() {
     } catch (err) {
       console.error("Login error:", err);
 
-      setError(
-        err.response?.data?.message ||
-        "Login failed. Please try again."
-      );
+      if (
+  err.response?.data?.requiresVerification
+) {
+
+  navigate("/verify-email", {
+    state: {
+      email:
+        err.response.data.email ||
+        formData.email,
+    },
+  });
+
+  return;
+}
+
+setError(
+  err.response?.data?.message ||
+    "Login failed. Please try again."
+);
 
     } finally {
       setLoading(false);

@@ -5,7 +5,7 @@ import { CartContext } from "../context/cartContext";
 import API from "../api/axios";
 
 function Checkout() {
-  const { cart } = useContext(CartContext);
+ const { cart, clearCart } = useContext(CartContext);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -19,6 +19,8 @@ function Checkout() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const [paymentMethod, setPaymentMethod] = useState("stripe");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,9 +56,35 @@ function Checkout() {
         quantity: item.quantity,
       }));
 
+     
+    // =========================
+    // COD
+    // =========================
+
+    if (paymentMethod === "cod") {
+      const response = await API.post(
+        "/api/orders",
+        {
+          orderItems,
+          paymentMethod: "cod",
+        }
+      );
+
+      console.log("COD order created:", response.data);
+
+// Clear cart after successful COD order
+clearCart();
+
+navigate("/orders");
+
+return;
+    }
+
       console.log("Sending order items:", orderItems);
 
-      // Call backend Stripe endpoint
+       // =========================
+    // STRIPE
+    // =========================
        const response = await API.post(
       "/api/payment/create-checkout-session",
       {
@@ -79,7 +107,7 @@ function Checkout() {
       window.location.href = stripeUrl;
 
     } catch (err) {
-      console.error("Stripe checkout error:", err);
+      console.error("Checkout error:", err);
 
       setError(
         err.response?.data?.message ||
@@ -288,20 +316,70 @@ function Checkout() {
 
             </div>
 
+{/* =========================
+    PAYMENT METHOD
+========================= */}
+
+<div className="payment-method-section">
+
+  <h3>
+    Payment Method
+  </h3>
+
+  <label className="payment-option">
+
+    <input
+      type="radio"
+      name="paymentMethod"
+      value="stripe"
+      checked={paymentMethod === "stripe"}
+      onChange={(e) =>
+        setPaymentMethod(e.target.value)
+      }
+    />
+
+    <span>
+      💳 Pay with Stripe
+    </span>
+
+  </label>
+
+
+  <label className="payment-option">
+
+    <input
+      type="radio"
+      name="paymentMethod"
+      value="cod"
+      checked={paymentMethod === "cod"}
+      onChange={(e) =>
+        setPaymentMethod(e.target.value)
+      }
+    />
+
+    <span>
+      💵 Cash on Delivery
+    </span>
+
+  </label>
+
+</div>
 
             {/* PAY BUTTON */}
 
             <button
-              type="submit"
-              className="place-order-button"
-              disabled={loading}
-            >
-
-              {loading
-                ? "Redirecting to Stripe..."
-                : "💳 Pay with Stripe"}
-
-            </button>
+  type="submit"
+  className="place-order-button"
+  disabled={loading}
+>
+  {loading
+    ? paymentMethod === "cod"
+      ? "Placing Order..."
+      : "Redirecting to Stripe..."
+    : paymentMethod === "cod"
+      ? "💵 Place COD Order"
+      : "💳 Pay with Stripe"}
+</button>
 
           </form>
 

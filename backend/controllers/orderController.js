@@ -7,11 +7,17 @@ exports.createOrder = async (req, res) => {
   session.startTransaction();
 
   try {
-    const { orderItems } = req.body;
+   const { orderItems, paymentMethod } = req.body;
 
     if (!orderItems || orderItems.length === 0) {
       return res.status(400).json({ message: "No order items" });
     }
+
+    if (!["stripe", "cod"].includes(paymentMethod)) {
+  return res.status(400).json({
+    message: "Invalid payment method",
+  });
+}
 
     // ✅ Fetch all products
     const productIds = orderItems.map(i => i.product);
@@ -70,13 +76,14 @@ exports.createOrder = async (req, res) => {
       const data = sellerMap[sellerId];
 
       const order = await Order.create([{
-        user: req.user._id,
-        seller: sellerId,
-        orderItems: data.items,
-        totalPrice: data.totalPrice,
-        orderStatus: "processing",
-        paymentStatus: "pending",
-      }], { session });
+  user: req.user._id,
+  seller: sellerId,
+  orderItems: data.items,
+  totalPrice: data.totalPrice,
+  orderStatus: "processing",
+  paymentMethod,
+  paymentStatus: "pending",
+}], { session });
 
       createdOrders.push(order[0]);
     }

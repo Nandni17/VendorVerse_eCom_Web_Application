@@ -322,6 +322,35 @@ function SellerDashboard() {
 
         </Link>
 
+        {/* MESSAGES */}
+
+<Link
+  to="/conversations"
+  className="seller-action-card seller-message-card"
+>
+
+  <span className="seller-action-icon">
+    💬
+  </span>
+
+  <div>
+
+    <h3>
+      Messages
+    </h3>
+
+    <p>
+      Chat with your buyers and manage conversations.
+    </p>
+
+  </div>
+
+  <span>
+    →
+  </span>
+
+</Link>
+
       </section>
 
     </main>

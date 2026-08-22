@@ -69,6 +69,12 @@ const orderSchema = new mongoose.Schema(
     // =========================
     // PAYMENT
     // =========================
+    
+  paymentMethod: {
+  type: String,
+  enum: ["stripe", "cod"],
+  default: "stripe",
+},
 
     paymentInfo: {
       id: String,
