@@ -1,4 +1,9 @@
 import { useState } from "react";
+import {
+  X,
+  ChevronRight,
+  ArrowRight,
+} from "lucide-react";
 
 const faqData = [
   {
@@ -108,7 +113,16 @@ function FAQ() {
                   </span>
 
                   <span className="faq-arrow">
-                    {isOpen ? "×" : "›"}
+
+                    {isOpen ? (
+                      <X size={22} strokeWidth={1.8} />
+                    ) : (
+                      <ChevronRight
+                        size={22}
+                        strokeWidth={1.8}
+                      />
+                    )}
+
                   </span>
 
                 </button>
@@ -116,9 +130,11 @@ function FAQ() {
 
                 {isOpen && (
                   <div className="faq-answer">
+
                     <p>
                       {item.answer}
                     </p>
+
                   </div>
                 )}
 
@@ -147,7 +163,11 @@ function FAQ() {
           href="/contact"
           className="hero-primary-button"
         >
-          Contact Us →
+          Contact Us
+          <ArrowRight
+            size={18}
+            strokeWidth={1.8}
+          />
         </a>
 
       </section>

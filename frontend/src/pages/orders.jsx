@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import API from "../api/axios";
+import {
+  Package,
+  ArrowRight,
+} from "../icons";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
@@ -72,7 +76,7 @@ function Orders() {
         <div className="orders-empty">
 
           <div className="orders-empty-icon">
-            📦
+            <Package size={48} />
           </div>
 
           <h2>No orders yet</h2>
@@ -85,7 +89,8 @@ function Orders() {
             to="/products"
             className="orders-shop-button"
           >
-            Start Shopping →
+            Start Shopping
+            <ArrowRight size={18} />
           </Link>
 
         </div>
@@ -197,7 +202,8 @@ function Orders() {
                 to={`/orders/${order._id}`}
                 className="order-details-button"
               >
-                View Details →
+                View Details
+                <ArrowRight size={18} />
               </Link>
 
             </div>

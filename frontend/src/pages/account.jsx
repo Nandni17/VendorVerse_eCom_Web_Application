@@ -2,6 +2,19 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import API from "../api/axios";
 
+import {
+  User,
+  Store,
+  Shield,
+  Package,
+  Heart,
+  MessageCircle,
+  LayoutDashboard,
+  LogOut,
+  Pencil,
+  ArrowRight,
+} from "../icons";
+
 function Account() {
   const navigate = useNavigate();
 
@@ -46,7 +59,7 @@ function Account() {
         <div className="account-container">
 
           <div className="account-icon-large">
-            👤
+            <User size={32} />
           </div>
 
           <p className="account-eyebrow">
@@ -98,21 +111,34 @@ function Account() {
         <div className="account-header">
 
           <div className="account-icon-large">
-  {profile?.profileImage ? (
-    <img
-      src={profile.profileImage}
-      alt="Profile"
-      className="account-profile-image"
-    />
-  ) : (
-    isAdmin ? "🛡️" : isSeller ? "🏪" : "👤"
-  )}
-</div>
+
+            {profile?.profileImage ? (
+              <img
+                src={profile.profileImage}
+                alt="Profile"
+                className="account-profile-image"
+              />
+            ) : (
+              isAdmin ? (
+                <Shield size={32} />
+              ) : isSeller ? (
+                <Store size={32} />
+              ) : (
+                <User size={32} />
+              )
+            )}
+
+          </div>
 
           <div>
 
             <p className="account-eyebrow">
-              VENDORVERSE {isAdmin ? "ADMIN" : isSeller ? "SELLER" : "ACCOUNT"}
+              VENDORVERSE{" "}
+              {isAdmin
+                ? "ADMIN"
+                : isSeller
+                ? "SELLER"
+                : "ACCOUNT"}
             </p>
 
             <h1>
@@ -145,6 +171,7 @@ function Account() {
           <div className="account-card-header">
 
             <div>
+
               <p className="card-eyebrow">
                 PROFILE
               </p>
@@ -152,69 +179,92 @@ function Account() {
               <h2>
                 Personal Information
               </h2>
+
             </div>
 
-             <button
-    type="button"
-    className="edit-profile-button"
-    onClick={() => navigate("/edit-profile")}
-  >
-    ✏️ Edit Profile
-  </button>
 
-            {/* <span className="card-icon">
-              👤
-            </span> */}
+            <button
+              type="button"
+              className="edit-profile-button"
+              onClick={() => navigate("/edit-profile")}
+            >
+              <Pencil size={16} />
+              Edit Profile
+            </button>
 
           </div>
+
 
           <div className="profile-info">
 
             <div className="profile-item">
               <span>Name</span>
+
               <strong>
                 {profile?.name || user.name}
               </strong>
             </div>
 
+
             <div className="profile-item">
               <span>Email</span>
+
               <strong>
                 {profile?.email || user.email}
               </strong>
             </div>
 
+
             <div className="profile-item">
               <span>Account Type</span>
+
               <strong className="role-badge">
                 {user.role || "buyer"}
               </strong>
             </div>
 
+
             {profile?.phone && (
               <div className="profile-item">
-                <span>Phone</span>
+
+                <span>
+                  Phone
+                </span>
+
                 <strong>
                   {profile.phone}
                 </strong>
+
               </div>
             )}
+
 
             {profile?.city && (
               <div className="profile-item">
-                <span>City</span>
+
+                <span>
+                  City
+                </span>
+
                 <strong>
                   {profile.city}
                 </strong>
+
               </div>
             )}
 
+
             {profile?.address && (
-  <div className="profile-item address-item">
-                <span>Address</span>
+              <div className="profile-item address-item">
+
+                <span>
+                  Address
+                </span>
+
                 <strong>
                   {profile.address}
                 </strong>
+
               </div>
             )}
 
@@ -239,7 +289,7 @@ function Account() {
             >
 
               <div className="option-icon">
-                📦
+                <Package size={22} />
               </div>
 
               <div className="option-content">
@@ -255,7 +305,7 @@ function Account() {
               </div>
 
               <span className="option-arrow">
-                →
+                <ArrowRight size={22} />
               </span>
 
             </button>
@@ -269,7 +319,7 @@ function Account() {
             >
 
               <div className="option-icon">
-                ♡
+                <Heart size={22} />
               </div>
 
               <div className="option-content">
@@ -285,10 +335,11 @@ function Account() {
               </div>
 
               <span className="option-arrow">
-                →
+                <ArrowRight size={22} />
               </span>
 
             </button>
+
 
             {/* LOGOUT */}
 
@@ -298,7 +349,7 @@ function Account() {
             >
 
               <div className="option-icon">
-                ↪
+                <LogOut size={22} />
               </div>
 
               <div className="option-content">
@@ -314,7 +365,7 @@ function Account() {
               </div>
 
               <span className="option-arrow">
-                →
+                <ArrowRight size={22} />
               </span>
 
             </button>
@@ -325,100 +376,106 @@ function Account() {
 
 
         {/* =================================================
-    SELLER ACCOUNT OPTIONS
-================================================= */}
+            SELLER ACCOUNT OPTIONS
+        ================================================= */}
 
-{user.role === "seller" && (
+        {user.role === "seller" && (
 
-  <section className="account-options">
+          <section className="account-options">
 
-     {/* SELLER DASHBOARD */}
+            {/* SELLER DASHBOARD */}
 
-<button
-  className="account-option"
-  onClick={() => navigate("/seller")}
->
-  <div className="option-icon">
-    📊
-  </div>
+            <button
+              className="account-option"
+              onClick={() => navigate("/seller")}
+            >
 
-  <div className="option-content">
-    <h3>
-      Seller Dashboard
-    </h3>
+              <div className="option-icon">
+                <LayoutDashboard size={22} />
+              </div>
 
-    <p>
-      Manage your products, orders and sales.
-    </p>
-  </div>
+              <div className="option-content">
 
-  <span className="option-arrow">
-    →
-  </span>
-</button>
+                <h3>
+                  Seller Dashboard
+                </h3>
 
-    {/* MESSAGES */}
+                <p>
+                  Manage your products, orders and sales.
+                </p>
 
-    <button
-      className="account-option"
-      onClick={() => navigate("/conversations")}
-    >
+              </div>
 
-      <div className="option-icon">
-        💬
-      </div>
+              <span className="option-arrow">
+                <ArrowRight size={22} />
+              </span>
 
-      <div className="option-content">
-
-        <h3>
-          Messages
-        </h3>
-
-        <p>
-          Chat with buyers about your products and orders.
-        </p>
-
-      </div>
-
-      <span className="option-arrow">
-        →
-      </span>
-
-    </button>
+            </button>
 
 
-    {/* LOGOUT */}
+            {/* MESSAGES */}
 
-    <button
-      className="account-option logout-option"
-      onClick={handleLogout}
-    >
+            <button
+              className="account-option"
+              onClick={() => navigate("/conversations")}
+            >
 
-      <div className="option-icon">
-        ↪
-      </div>
+              <div className="option-icon">
+                <MessageCircle size={22} />
+              </div>
 
-      <div className="option-content">
+              <div className="option-content">
 
-        <h3>
-          Logout
-        </h3>
+                <h3>
+                  Messages
+                </h3>
 
-        <p>
-          Sign out of your VendorVerse account.
-        </p>
+                <p>
+                  Chat with buyers about your products and orders.
+                </p>
 
-      </div>
+              </div>
 
-      <span className="option-arrow">
-        →
-      </span>
+              <span className="option-arrow">
+                <ArrowRight size={22} />
+              </span>
 
-    </button>
+            </button>
 
-  </section>
 
-)}
+            {/* LOGOUT */}
+
+            <button
+              className="account-option logout-option"
+              onClick={handleLogout}
+            >
+
+              <div className="option-icon">
+                <LogOut size={22} />
+              </div>
+
+              <div className="option-content">
+
+                <h3>
+                  Logout
+                </h3>
+
+                <p>
+                  Sign out of your VendorVerse account.
+                </p>
+
+              </div>
+
+              <span className="option-arrow">
+                <ArrowRight size={22} />
+              </span>
+
+            </button>
+
+          </section>
+
+        )}
+
 
         {/* =================================================
             ADMIN ACCOUNT OPTIONS
@@ -436,7 +493,7 @@ function Account() {
             >
 
               <div className="option-icon">
-                🛡️
+                <Shield size={22} />
               </div>
 
               <div className="option-content">
@@ -452,10 +509,11 @@ function Account() {
               </div>
 
               <span className="option-arrow">
-                →
+                <ArrowRight size={22} />
               </span>
 
             </button>
+
 
             {/* LOGOUT */}
 
@@ -465,7 +523,7 @@ function Account() {
             >
 
               <div className="option-icon">
-                ↪
+                <LogOut size={22} />
               </div>
 
               <div className="option-content">
@@ -481,7 +539,7 @@ function Account() {
               </div>
 
               <span className="option-arrow">
-                →
+                <ArrowRight size={22} />
               </span>
 
             </button>
@@ -497,3 +555,4 @@ function Account() {
 }
 
 export default Account;
+

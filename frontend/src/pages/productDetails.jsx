@@ -1,6 +1,18 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
+import {
+  ArrowLeft,
+  MessageCircle,
+  Heart,
+  ShoppingCart,
+  Check,
+  Star,
+  User,
+  Pencil,
+  Trash2,
+} from "../icons";
+
 import API from "../api/axios";
 
 import { CartContext } from "../context/cartContext";
@@ -133,7 +145,10 @@ function ProductDetails() {
     return (
       <div className="product-details-status">
         <div className="loader"></div>
-        <p>Loading product...</p>
+
+        <p>
+          Loading product...
+        </p>
       </div>
     );
   }
@@ -145,16 +160,29 @@ function ProductDetails() {
   if (error) {
     return (
       <div className="product-details-status">
-        <h2>Product not found</h2>
 
-        <p>{error}</p>
+        <h2>
+          Product not found
+        </h2>
+
+        <p>
+          {error}
+        </p>
 
         <Link
           to="/products"
           className="back-button"
         >
-          ← Back to Shop
+          <ArrowLeft
+            size={18}
+            strokeWidth={1.8}
+          />
+
+          <span>
+            Back to Shop
+          </span>
         </Link>
+
       </div>
     );
   }
@@ -317,7 +345,7 @@ function ProductDetails() {
       setReviewComment("");
 
       setReviewMessage(
-        "Review submitted successfully! ⭐"
+        "Review submitted successfully!"
       );
     } catch (err) {
       console.error(
@@ -419,7 +447,7 @@ function ProductDetails() {
       setEditComment("");
 
       setReviewMessage(
-        "Review updated successfully! ⭐"
+        "Review updated successfully!"
       );
     } catch (err) {
       console.error(
@@ -566,11 +594,20 @@ function ProductDetails() {
 
           <div className="details-rating">
 
-            <span>
-              ⭐{" "}
-              {Number(
-                product.rating || 0
-              ).toFixed(1)}
+            <span className="rating-stars">
+
+              <Star
+                size={17}
+                strokeWidth={1.8}
+                fill="currentColor"
+              />
+
+              <span>
+                {Number(
+                  product.rating || 0
+                ).toFixed(1)}
+              </span>
+
             </span>
 
             <span>
@@ -602,9 +639,24 @@ function ProductDetails() {
             }
           >
 
-            {product.stock > 0
-              ? `✓ In Stock (${product.stock} available)`
-              : "✕ Out of Stock"}
+            {product.stock > 0 ? (
+              <>
+                <Check
+                  size={17}
+                  strokeWidth={2}
+                />
+
+                <span>
+                  In Stock ({product.stock} available)
+                </span>
+              </>
+            ) : (
+              <>
+                <span>
+                  Out of Stock
+                </span>
+              </>
+            )}
 
           </div>
 
@@ -641,7 +693,14 @@ function ProductDetails() {
               className="chat-seller-button"
               onClick={handleChatWithSeller}
             >
-              💬 Chat with Seller
+              <MessageCircle
+                size={18}
+                strokeWidth={1.8}
+              />
+
+              <span>
+                Chat with Seller
+              </span>
             </button>
 
 
@@ -656,9 +715,21 @@ function ProductDetails() {
               }`}
               onClick={handleWishlist}
             >
-              {isWishlisted
-                ? "♥ Wishlisted"
-                : "♡ Wishlist"}
+              <Heart
+                size={18}
+                strokeWidth={1.8}
+                fill={
+                  isWishlisted
+                    ? "currentColor"
+                    : "none"
+                }
+              />
+
+              <span>
+                {isWishlisted
+                  ? "Wishlisted"
+                  : "Wishlist"}
+              </span>
             </button>
 
 
@@ -670,7 +741,14 @@ function ProductDetails() {
               onClick={handleAddToCart}
               disabled={product.stock <= 0}
             >
-              🛒 Add to Cart
+              <ShoppingCart
+                size={18}
+                strokeWidth={1.8}
+              />
+
+              <span>
+                Add to Cart
+              </span>
             </button>
 
 
@@ -724,10 +802,19 @@ function ProductDetails() {
             <div className="reviews-summary">
 
               <strong>
-                ⭐{" "}
-                {Number(
-                  product.rating || 0
-                ).toFixed(1)}
+
+                <Star
+                  size={18}
+                  strokeWidth={1.8}
+                  fill="currentColor"
+                />
+
+                <span>
+                  {Number(
+                    product.rating || 0
+                  ).toFixed(1)}
+                </span>
+
               </strong>
 
               <span>
@@ -769,7 +856,12 @@ function ProductDetails() {
               <div className="no-reviews">
 
                 <div className="no-reviews-icon">
-                  ⭐
+
+                  <Star
+                    size={36}
+                    strokeWidth={1.5}
+                  />
+
                 </div>
 
                 <h3>
@@ -832,7 +924,16 @@ function ProductDetails() {
                             )
                           }
                         >
-                          ★
+                          <Star
+                            size={22}
+                            strokeWidth={1.8}
+                            fill={
+                              star <=
+                              reviewRating
+                                ? "currentColor"
+                                : "none"
+                            }
+                          />
                         </button>
 
                       )
@@ -977,7 +1078,12 @@ function ProductDetails() {
                           ) : (
 
                             <div className="review-user-placeholder">
-                              👤
+
+                              <User
+                                size={22}
+                                strokeWidth={1.7}
+                              />
+
                             </div>
 
                           )}
@@ -997,7 +1103,16 @@ function ProductDetails() {
                               true && (
 
                               <span className="verified-purchase">
-                                ✓ Verified Purchase
+
+                                <Check
+                                  size={14}
+                                  strokeWidth={2}
+                                />
+
+                                <span>
+                                  Verified Purchase
+                                </span>
+
                               </span>
 
                             )}
@@ -1026,9 +1141,19 @@ function ProductDetails() {
 
                             <div className="review-rating">
 
-                              {"⭐".repeat(
-                                Number(
-                                  review.rating
+                              {Array.from(
+                                {
+                                  length: Number(
+                                    review.rating
+                                  ),
+                                },
+                                (_, index) => (
+                                  <Star
+                                    key={index}
+                                    size={16}
+                                    strokeWidth={1.8}
+                                    fill="currentColor"
+                                  />
                                 )
                               )}
 
@@ -1056,7 +1181,15 @@ function ProductDetails() {
                                     )
                                   }
                                 >
-                                  ✏️ Edit
+                                  <Pencil
+                                    size={15}
+                                    strokeWidth={1.8}
+                                  />
+
+                                  <span>
+                                    Edit
+                                  </span>
+
                                 </button>
 
 
@@ -1069,7 +1202,15 @@ function ProductDetails() {
                                     )
                                   }
                                 >
-                                  🗑️ Delete
+                                  <Trash2
+                                    size={15}
+                                    strokeWidth={1.8}
+                                  />
+
+                                  <span>
+                                    Delete
+                                  </span>
+
                                 </button>
 
                               </div>
@@ -1117,7 +1258,16 @@ function ProductDetails() {
                                       )
                                     }
                                   >
-                                    ★
+                                    <Star
+                                      size={22}
+                                      strokeWidth={1.8}
+                                      fill={
+                                        star <=
+                                        editRating
+                                          ? "currentColor"
+                                          : "none"
+                                      }
+                                    />
                                   </button>
 
                                 )
@@ -1169,9 +1319,17 @@ function ProductDetails() {
                                 editSubmitting
                               }
                             >
-                              {editSubmitting
-                                ? "Saving..."
-                                : "💾 Save Changes"}
+                              <Check
+                                size={16}
+                                strokeWidth={1.8}
+                              />
+
+                              <span>
+                                {editSubmitting
+                                  ? "Saving..."
+                                  : "Save Changes"}
+                              </span>
+
                             </button>
 
 

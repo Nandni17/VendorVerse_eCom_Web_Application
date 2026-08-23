@@ -1,5 +1,11 @@
 import { Link } from "react-router-dom";
 
+import {
+  XCircle,
+  ArrowLeft,
+  ArrowRight,
+} from "../icons";
+
 function PaymentCancel() {
   return (
     <main className="payment-result-page">
@@ -7,7 +13,10 @@ function PaymentCancel() {
       <div className="payment-result-card">
 
         <div className="payment-cancel-icon">
-          ×
+          <XCircle
+            size={64}
+            strokeWidth={1.5}
+          />
         </div>
 
         <p className="section-eyebrow cancel">
@@ -23,13 +32,13 @@ function PaymentCancel() {
           is still available so you can try again.
         </p>
 
-
         <div className="payment-result-actions">
 
           <Link
             to="/checkout"
             className="payment-primary-button"
           >
+            <ArrowLeft size={18} />
             Return to Checkout
           </Link>
 
@@ -38,6 +47,7 @@ function PaymentCancel() {
             className="payment-secondary-button"
           >
             Continue Shopping
+            <ArrowRight size={18} />
           </Link>
 
         </div>

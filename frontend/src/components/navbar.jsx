@@ -8,12 +8,22 @@ import {
 import { CartContext } from "../context/cartContext";
 import { WishlistContext } from "../context/wishlistContext";
 
+// Centralized icons
+import {
+  User,
+  Heart,
+  ShoppingCart,
+  LogOut,
+} from "../icons";
+
 function Navbar() {
   const navigate = useNavigate();
 
   const [showAccountMenu, setShowAccountMenu] =
     useState(false);
-    const [profileImage, setProfileImage] = useState("");
+
+  const [profileImage, setProfileImage] =
+    useState("");
 
   // =========================
   // AUTH USER
@@ -22,7 +32,8 @@ function Navbar() {
   let user = null;
 
   try {
-    const storedUser = localStorage.getItem("user");
+    const storedUser =
+      localStorage.getItem("user");
 
     if (storedUser) {
       user = JSON.parse(storedUser);
@@ -36,37 +47,45 @@ function Navbar() {
     localStorage.removeItem("user");
   }
 
-useEffect(() => {
-  const fetchProfileImage = async () => {
-    if (!user) {
-      setProfileImage("");
-      return;
-    }
+  // =========================
+  // PROFILE IMAGE
+  // =========================
 
-    try {
-      const response = await API.get("/api/users/profile");
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      if (!user) {
+        setProfileImage("");
+        return;
+      }
 
-      setProfileImage(
-        response.data.profileImage || ""
-      );
-    } catch (error) {
-      console.error(
-        "Unable to load profile image:",
-        error
-      );
-    }
-  };
+      try {
+        const response = await API.get(
+          "/api/users/profile"
+        );
 
-  fetchProfileImage();
-}, []);
+        setProfileImage(
+          response.data.profileImage || ""
+        );
+      } catch (error) {
+        console.error(
+          "Unable to load profile image:",
+          error
+        );
+      }
+    };
+
+    fetchProfileImage();
+  }, []);
 
   // =========================
   // CART + WISHLIST
   // =========================
 
-  const { cart } = useContext(CartContext);
+  const { cart } =
+    useContext(CartContext);
 
-  const { wishlist } = useContext(WishlistContext);
+  const { wishlist } =
+    useContext(WishlistContext);
 
   // Total cart quantity
   const cartCount = cart.reduce(
@@ -76,21 +95,22 @@ useEffect(() => {
   );
 
   // Wishlist count
-  const wishlistCount = wishlist.length;
+  const wishlistCount =
+    wishlist.length;
 
   // =========================
   // ACCOUNT
   // =========================
 
   const handleAccountClick = () => {
-    // Not logged in
     if (!user) {
       navigate("/login");
       return;
     }
 
-    // Logged in
-    setShowAccountMenu((prev) => !prev);
+    setShowAccountMenu(
+      (prev) => !prev
+    );
   };
 
   // =========================
@@ -104,7 +124,6 @@ useEffect(() => {
 
     navigate("/login");
 
-    // Refresh navbar/auth state
     window.location.reload();
   };
 
@@ -154,13 +173,15 @@ useEffect(() => {
             Shop
           </Link>
 
-          <Link to="/events">
-  Events
-</Link>
 
-<Link to="/faq">
-  FAQ
-</Link>
+          <Link to="/events">
+            Events
+          </Link>
+
+
+          <Link to="/faq">
+            FAQ
+          </Link>
 
 
           {/* =========================
@@ -174,7 +195,7 @@ useEffect(() => {
           >
 
             <span className="navbar-icon">
-              ♡
+              <Heart size={22} />
             </span>
 
             {wishlistCount > 0 && (
@@ -197,7 +218,7 @@ useEffect(() => {
           >
 
             <span className="navbar-icon">
-              🛒
+              <ShoppingCart size={22} />
             </span>
 
             {cartCount > 0 && (
@@ -216,79 +237,82 @@ useEffect(() => {
           <div className="account-wrapper">
 
             <button
-  type="button"
-  className="account-button"
-  onClick={handleAccountClick}
-  aria-label="Account"
-  aria-expanded={showAccountMenu}
->
-  {profileImage ? (
-    <img
-      src={profileImage}
-      alt="Profile"
-      className="navbar-profile-image"
-    />
-  ) : (
-    "👤"
-  )}
-</button>
+              type="button"
+              className="account-button"
+              onClick={handleAccountClick}
+              aria-label="Account"
+              aria-expanded={
+                showAccountMenu
+              }
+            >
+
+              {profileImage ? (
+                <img
+                  src={profileImage}
+                  alt="Profile"
+                  className="navbar-profile-image"
+                />
+              ) : (
+                <User size={22} />
+              )}
+
+            </button>
 
 
             {/* =========================
                 ACCOUNT MENU
             ========================= */}
 
-            {user && showAccountMenu && (
+            {user &&
+              showAccountMenu && (
 
-              <div className="account-menu">
+                <div className="account-menu">
 
-                {/* USER INFO */}
+                  {/* USER INFO */}
 
-                <div className="account-user">
+                  <div className="account-user">
 
-                  <strong>
-                    {user.name || "VendorVerse User"}
-                  </strong>
+                    <strong>
+                      {user.name ||
+                        "VendorVerse User"}
+                    </strong>
 
-                  <span>
-                    {user.email || ""}
-                  </span>
+                    <span>
+                      {user.email || ""}
+                    </span>
+
+                  </div>
+
+
+                  {/* MY ACCOUNT */}
+
+                  <button
+                    type="button"
+                    onClick={
+                      handleMyAccount
+                    }
+                  >
+                    <User size={18} />
+                    My Account
+                  </button>
+
+
+                  {/* LOGOUT */}
+
+                  <button
+                    type="button"
+                    onClick={
+                      handleLogout
+                    }
+                    className="logout-button"
+                  >
+                    <LogOut size={18} />
+                    Logout
+                  </button>
 
                 </div>
 
-
-                {/* MY ACCOUNT */}
-
-                <button
-                  type="button"
-                  onClick={handleMyAccount}
-                >
-                  👤 My Account
-                </button>
-
-                {/* <button
-  type="button"
-  onClick={() => {
-    setShowAccountMenu(false);
-    navigate("/orders");
-  }}
->
-  📦 My Orders
-</button> */}
-
-                {/* LOGOUT */}
-
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="logout-button"
-                >
-                  ↪ Logout
-                </button>
-
-              </div>
-
-            )}
+              )}
 
           </div>
 

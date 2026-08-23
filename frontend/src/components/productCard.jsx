@@ -1,10 +1,18 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 
+import {
+  Heart,
+  ShoppingCart,
+  Star,
+} from "../icons";
+
 import { CartContext } from "../context/cartContext";
 import { WishlistContext } from "../context/wishlistContext";
 
 function ProductCard({ product }) {
+  const navigate = useNavigate();
+
   const { addToCart } = useContext(CartContext);
 
   const {
@@ -13,10 +21,17 @@ function ProductCard({ product }) {
     isInWishlist,
   } = useContext(WishlistContext);
 
-  const navigate = useNavigate();
+  // =========================
+  // WISHLIST STATUS
+  // =========================
 
   const wishlisted = isInWishlist(product._id);
 
+  // =========================
+  // STOCK STATUS
+  // =========================
+
+  const isOutOfStock = Number(product.stock || 0) <= 0;
 
   // =========================
   // ADD TO CART
@@ -26,11 +41,14 @@ function ProductCard({ product }) {
     e.preventDefault();
     e.stopPropagation();
 
+    if (isOutOfStock) {
+      return;
+    }
+
     addToCart(product);
 
     navigate("/cart");
   };
-
 
   // =========================
   // WISHLIST
@@ -47,9 +65,8 @@ function ProductCard({ product }) {
     }
   };
 
-
   return (
-    <div className="product-card">
+    <article className="product-card">
 
       {/* =========================
           PRODUCT IMAGE
@@ -57,9 +74,7 @@ function ProductCard({ product }) {
 
       <div className="product-image-container">
 
-        <Link
-          to={`/products/${product._id}`}
-        >
+        <Link to={`/products/${product._id}`}>
 
           <img
             src={product.image}
@@ -68,6 +83,17 @@ function ProductCard({ product }) {
           />
 
         </Link>
+
+
+        {/* =========================
+            OUT OF STOCK BADGE
+        ========================= */}
+
+        {isOutOfStock && (
+          <span className="product-stock-badge">
+            Out of Stock
+          </span>
+        )}
 
 
         {/* =========================
@@ -80,10 +106,22 @@ function ProductCard({ product }) {
             wishlisted ? "active" : ""
           }`}
           onClick={handleWishlist}
-          aria-label="Add to wishlist"
+          aria-label={
+            wishlisted
+              ? "Remove from wishlist"
+              : "Add to wishlist"
+          }
         >
 
-          {wishlisted ? "♥" : "♡"}
+          <Heart
+            size={19}
+            strokeWidth={1.8}
+            fill={
+              wishlisted
+                ? "currentColor"
+                : "none"
+            }
+          />
 
         </button>
 
@@ -96,10 +134,14 @@ function ProductCard({ product }) {
 
       <div className="product-info">
 
+        {/* CATEGORY */}
+
         <p className="product-category">
           {product.category || "Featured"}
         </p>
 
+
+        {/* PRODUCT NAME */}
 
         <Link
           to={`/products/${product._id}`}
@@ -109,16 +151,33 @@ function ProductCard({ product }) {
         </Link>
 
 
+        {/* DESCRIPTION */}
+
         <p className="product-description">
-          {product.description}
+          {product.description ||
+            "No description available."}
         </p>
 
 
+        {/* =========================
+            RATING
+        ========================= */}
+
         <div className="product-rating">
 
-          ⭐ {Number(product.rating || 0).toFixed(1)}
+          <Star
+            size={15}
+            strokeWidth={1.8}
+            fill="currentColor"
+          />
 
           <span>
+            {Number(
+              product.rating || 0
+            ).toFixed(1)}
+          </span>
+
+          <span className="product-review-count">
             ({product.numReviews || 0})
           </span>
 
@@ -133,7 +192,9 @@ function ProductCard({ product }) {
 
           <span className="product-price">
             ₹
-            {Number(product.price).toLocaleString("en-IN")}
+            {Number(
+              product.price || 0
+            ).toLocaleString("en-IN")}
           </span>
 
 
@@ -141,15 +202,27 @@ function ProductCard({ product }) {
             type="button"
             className="add-cart-button"
             onClick={handleAddToCart}
+            disabled={isOutOfStock}
           >
-            Add to Cart
+
+            <ShoppingCart
+              size={17}
+              strokeWidth={1.8}
+            />
+
+            <span>
+              {isOutOfStock
+                ? "Out of Stock"
+                : "Add to Cart"}
+            </span>
+
           </button>
 
         </div>
 
       </div>
 
-    </div>
+    </article>
   );
 }
 

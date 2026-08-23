@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+import {
+  ArrowLeft,
+  Plus,
+  Check,
+} from "../icons";
+
 import API from "../api/axios";
 
 function AddProduct() {
@@ -45,7 +51,10 @@ function AddProduct() {
       setError("");
       setSuccess("");
 
-      // Basic validation
+      // =========================
+      // BASIC VALIDATION
+      // =========================
+
       if (
         !formData.name.trim() ||
         !formData.price ||
@@ -60,6 +69,10 @@ function AddProduct() {
         setLoading(false);
         return;
       }
+
+      // =========================
+      // PRODUCT DATA
+      // =========================
 
       const productData = {
         name: formData.name.trim(),
@@ -85,6 +98,10 @@ function AddProduct() {
         productData
       );
 
+      // =========================
+      // CREATE PRODUCT
+      // =========================
+
       const response = await API.post(
         "/api/products",
         productData
@@ -99,7 +116,10 @@ function AddProduct() {
         "Product added successfully!"
       );
 
-      // Go back after a short delay
+      // =========================
+      // REDIRECT
+      // =========================
+
       setTimeout(() => {
         navigate("/seller/products");
       }, 700);
@@ -135,16 +155,26 @@ function AddProduct() {
             to="/seller/products"
             className="seller-back-link"
           >
-            ← Back to My Products
+            <ArrowLeft
+              size={17}
+              strokeWidth={1.8}
+            />
+
+            <span>
+              Back to My Products
+            </span>
           </Link>
+
 
           <p className="section-eyebrow">
             SELLER CENTER
           </p>
 
+
           <h1>
             Add Product
           </h1>
+
 
           <p>
             Add a new product to your
@@ -162,15 +192,29 @@ function AddProduct() {
 
       <section className="seller-product-form-card">
 
+        {/* ERROR */}
+
         {error && (
           <div className="seller-form-error">
             {error}
           </div>
         )}
 
+
+        {/* SUCCESS */}
+
         {success && (
           <div className="seller-form-success">
-            {success}
+
+            <Check
+              size={17}
+              strokeWidth={2}
+            />
+
+            <span>
+              {success}
+            </span>
+
           </div>
         )}
 
@@ -190,6 +234,7 @@ function AddProduct() {
               </span>
 
               <div>
+
                 <h2>
                   Product Information
                 </h2>
@@ -197,6 +242,7 @@ function AddProduct() {
                 <p>
                   Tell customers about your product.
                 </p>
+
               </div>
 
             </div>
@@ -271,7 +317,6 @@ function AddProduct() {
 
 
             <div className="seller-form-grid">
-
 
               {/* PRICE */}
 
@@ -507,9 +552,28 @@ function AddProduct() {
               className="seller-submit-button"
               disabled={loading}
             >
-              {loading
-                ? "Adding Product..."
-                : "Add Product →"}
+
+              {loading ? (
+                <>
+                  <span className="button-loader"></span>
+
+                  <span>
+                    Adding Product...
+                  </span>
+                </>
+              ) : (
+                <>
+                  <Plus
+                    size={17}
+                    strokeWidth={1.8}
+                  />
+
+                  <span>
+                    Add Product
+                  </span>
+                </>
+              )}
+
             </button>
 
           </div>

@@ -1,6 +1,11 @@
+import { Star } from "../icons";
+
 function Rating({ rating, reviews }) {
-  // Don't show fake ratings if the backend doesn't have them
-  if (!rating) {
+  // =========================
+  // NEW PRODUCT
+  // =========================
+
+  if (!rating || Number(rating) <= 0) {
     return (
       <div className="rating new-product">
         <span>New product</span>
@@ -8,25 +13,52 @@ function Rating({ rating, reviews }) {
     );
   }
 
-  const roundedRating = Math.round(rating);
+  const roundedRating = Math.round(Number(rating));
 
   return (
     <div className="rating">
 
+      {/* =========================
+          STARS
+      ========================= */}
+
       <div className="stars">
+
         {[1, 2, 3, 4, 5].map((star) => (
-          <span
+
+          <Star
             key={star}
-            className={star <= roundedRating ? "star active" : "star"}
-          >
-            ★
-          </span>
+            size={16}
+            strokeWidth={1.8}
+            className={
+              star <= roundedRating
+                ? "star active"
+                : "star"
+            }
+            fill={
+              star <= roundedRating
+                ? "currentColor"
+                : "none"
+            }
+          />
+
         ))}
+
       </div>
+
+
+      {/* =========================
+          RATING NUMBER
+      ========================= */}
 
       <span className="rating-number">
         {Number(rating).toFixed(1)}
       </span>
+
+
+      {/* =========================
+          REVIEW COUNT
+      ========================= */}
 
       {reviews !== undefined && (
         <span className="review-count">

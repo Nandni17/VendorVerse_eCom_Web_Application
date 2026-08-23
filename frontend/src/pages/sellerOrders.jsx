@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import {
+  Package,
+  ArrowLeft,
+  ArrowRight,
+  Check,
+} from "../icons";
+
 import API from "../api/axios";
 
 function SellerOrders() {
@@ -143,7 +150,14 @@ function SellerOrders() {
             to="/seller"
             className="seller-orders-back"
           >
-            ← Seller Dashboard
+            <ArrowLeft
+              size={18}
+              strokeWidth={1.8}
+            />
+
+            <span>
+              Seller Dashboard
+            </span>
           </Link>
 
           <p className="section-eyebrow">
@@ -191,7 +205,10 @@ function SellerOrders() {
         <section className="seller-orders-empty">
 
           <div className="seller-orders-empty-icon">
-            📦
+            <Package
+              size={40}
+              strokeWidth={1.5}
+            />
           </div>
 
           <h2>
@@ -207,7 +224,14 @@ function SellerOrders() {
             to="/seller/products"
             className="seller-orders-button"
           >
-            Manage Products →
+            <span>
+              Manage Products
+            </span>
+
+            <ArrowRight
+              size={18}
+              strokeWidth={1.8}
+            />
           </Link>
 
         </section>
@@ -373,9 +397,10 @@ function SellerOrders() {
                               }
                             />
                           ) : (
-                            <span>
-                              📦
-                            </span>
+                            <Package
+                              size={28}
+                              strokeWidth={1.5}
+                            />
                           )}
 
                         </div>
@@ -489,10 +514,23 @@ function SellerOrders() {
                     ) : (
 
                       <span className="seller-status-complete">
+
                         {status ===
-                        "delivered"
-                          ? "✓ Order Delivered"
-                          : "Order Closed"}
+                        "delivered" ? (
+                          <>
+                            <Check
+                              size={17}
+                              strokeWidth={2}
+                            />
+
+                            <span>
+                              Order Delivered
+                            </span>
+                          </>
+                        ) : (
+                          "Order Closed"
+                        )}
+
                       </span>
 
                     )}

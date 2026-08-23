@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Mail, Phone, MapPin, Check } from "lucide-react";
 
 import API from "../api/axios";
 
@@ -106,7 +107,7 @@ function Contact() {
           <div className="contact-info-card">
 
             <div className="contact-info-icon">
-              ✉
+              <Mail size={22} strokeWidth={1.8} />
             </div>
 
             <div>
@@ -125,7 +126,7 @@ function Contact() {
           <div className="contact-info-card">
 
             <div className="contact-info-icon">
-              ☎
+              <Phone size={22} strokeWidth={1.8} />
             </div>
 
             <div>
@@ -144,7 +145,7 @@ function Contact() {
           <div className="contact-info-card">
 
             <div className="contact-info-icon">
-              📍
+              <MapPin size={22} strokeWidth={1.8} />
             </div>
 
             <div>
@@ -190,8 +191,17 @@ function Contact() {
 
           {submitted && (
             <div className="contact-success">
-              ✓ Your message has been sent
-              successfully.
+
+              <Check
+                size={18}
+                strokeWidth={2}
+              />
+
+              <span>
+                Your message has been sent
+                successfully.
+              </span>
+
             </div>
           )}
 

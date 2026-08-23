@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import {
+  Package,
+  Plus,
+  Truck,
+  MessageCircle,
+  ArrowRight,
+} from "../icons";
+
 import API from "../api/axios";
 
 function SellerDashboard() {
@@ -241,7 +249,7 @@ function SellerDashboard() {
         >
 
           <span className="seller-action-icon">
-            📦
+            <Package size={24} strokeWidth={1.8} />
           </span>
 
           <div>
@@ -257,7 +265,7 @@ function SellerDashboard() {
           </div>
 
           <span>
-            →
+            <ArrowRight size={20} strokeWidth={1.8} />
           </span>
 
         </Link>
@@ -271,7 +279,7 @@ function SellerDashboard() {
         >
 
           <span className="seller-action-icon">
-            ＋
+            <Plus size={24} strokeWidth={1.8} />
           </span>
 
           <div>
@@ -287,7 +295,7 @@ function SellerDashboard() {
           </div>
 
           <span>
-            →
+            <ArrowRight size={20} strokeWidth={1.8} />
           </span>
 
         </Link>
@@ -301,7 +309,7 @@ function SellerDashboard() {
         >
 
           <span className="seller-action-icon">
-            🚚
+            <Truck size={24} strokeWidth={1.8} />
           </span>
 
           <div>
@@ -317,39 +325,43 @@ function SellerDashboard() {
           </div>
 
           <span>
-            →
+            <ArrowRight size={20} strokeWidth={1.8} />
           </span>
 
         </Link>
 
+
         {/* MESSAGES */}
 
-<Link
-  to="/conversations"
-  className="seller-action-card seller-message-card"
->
+        <Link
+          to="/conversations"
+          className="seller-action-card seller-message-card"
+        >
 
-  <span className="seller-action-icon">
-    💬
-  </span>
+          <span className="seller-action-icon">
+            <MessageCircle
+              size={24}
+              strokeWidth={1.8}
+            />
+          </span>
 
-  <div>
+          <div>
 
-    <h3>
-      Messages
-    </h3>
+            <h3>
+              Messages
+            </h3>
 
-    <p>
-      Chat with your buyers and manage conversations.
-    </p>
+            <p>
+              Chat with your buyers and manage conversations.
+            </p>
 
-  </div>
+          </div>
 
-  <span>
-    →
-  </span>
+          <span>
+            <ArrowRight size={20} strokeWidth={1.8} />
+          </span>
 
-</Link>
+        </Link>
 
       </section>
 

@@ -2,21 +2,30 @@ import { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { CartContext } from "../context/cartContext";
+import {
+  CheckCircle,
+  Check,
+  ArrowRight,
+} from "../icons";
 
 function OrderSuccess() {
-    const { clearCart } = useContext(CartContext);
+  const { clearCart } = useContext(CartContext);
 
   useEffect(() => {
     // Payment completed → clear frontend cart
     clearCart();
   }, [clearCart]);
+
   return (
     <main className="order-success-page">
 
       <div className="order-success-card">
 
         <div className="success-icon">
-          ✓
+          <CheckCircle
+            size={64}
+            strokeWidth={1.5}
+          />
         </div>
 
         <p className="success-eyebrow">
@@ -41,7 +50,11 @@ function OrderSuccess() {
             </span>
 
             <strong>
-              Paid ✓
+              Paid{" "}
+              <Check
+                size={16}
+                strokeWidth={2.5}
+              />
             </strong>
           </div>
 
@@ -57,24 +70,28 @@ function OrderSuccess() {
 
         </div>
 
-         {/* ACTION BUTTONS */}
+        {/* ACTION BUTTONS */}
+
         <div className="success-actions">
 
           <Link
             to="/orders"
             className="success-primary-button"
           >
-            View My Orders →
+            View My Orders
+            <ArrowRight size={18} />
           </Link>
 
           <Link
             to="/products"
             className="success-secondary-button"
           >
-            Continue Shopping →
+            Continue Shopping
+            <ArrowRight size={18} />
           </Link>
 
         </div>
+
       </div>
 
     </main>

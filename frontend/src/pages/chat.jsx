@@ -1,5 +1,16 @@
-import { useEffect, useState, useContext } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+
+             import { useEffect, useState, useContext } from "react";
+import {
+  useParams,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
+
+import {
+  ArrowLeft,
+  Pencil,
+  Trash2,
+} from "../icons";
 
 import API from "../api/axios";
 import { AuthContext } from "../context/authContext";
@@ -8,6 +19,7 @@ function Chat() {
   const navigate = useNavigate();
   const location = useLocation();
   const { conversationId } = useParams();
+
   const { productId } = location.state || {};
   const { user } = useContext(AuthContext);
 
@@ -22,9 +34,14 @@ function Chat() {
   // EDIT MESSAGE
   // =========================
 
-  const [editingMessageId, setEditingMessageId] = useState(null);
-  const [editingText, setEditingText] = useState("");
-  const [editing, setEditing] = useState(false);
+  const [editingMessageId, setEditingMessageId] =
+    useState(null);
+
+  const [editingText, setEditingText] =
+    useState("");
+
+  const [editing, setEditing] =
+    useState(false);
 
 
   // =========================
@@ -38,13 +55,18 @@ function Chat() {
       );
 
       setMessages(response.data);
+
     } catch (err) {
-      console.error("Fetch messages error:", err);
+      console.error(
+        "Fetch messages error:",
+        err
+      );
 
       setError(
         err.response?.data?.message ||
           "Unable to load messages."
       );
+
     } finally {
       setLoading(false);
     }
@@ -88,12 +110,16 @@ function Chat() {
       setText("");
 
     } catch (err) {
-      console.error("Send message error:", err);
+      console.error(
+        "Send message error:",
+        err
+      );
 
       setError(
         err.response?.data?.message ||
           "Unable to send message."
       );
+
     } finally {
       setSending(false);
     }
@@ -141,7 +167,8 @@ function Chat() {
         }
       );
 
-      const updatedMessage = response.data.data;
+      const updatedMessage =
+        response.data.data;
 
       setMessages((prev) =>
         prev.map((message) =>
@@ -155,12 +182,16 @@ function Chat() {
       setEditingText("");
 
     } catch (err) {
-      console.error("Edit message error:", err);
+      console.error(
+        "Edit message error:",
+        err
+      );
 
       setError(
         err.response?.data?.message ||
           "Unable to edit message."
       );
+
     } finally {
       setEditing(false);
     }
@@ -172,7 +203,6 @@ function Chat() {
   // =========================
 
   const handleDelete = async (messageId) => {
-
     const confirmed = window.confirm(
       "Are you sure you want to delete this message?"
     );
@@ -231,25 +261,39 @@ function Chat() {
 
       <div className="chat-container">
 
+        {/* =========================
+            BACK BUTTON
+        ========================= */}
+
         <button
-  type="button"
-  className="chat-back-button"
-  onClick={() => {
-    if (user?.role === "seller") {
-      navigate("/conversations");
-    } else {
-      if (productId) {
-        navigate(`/products/${productId}`);
-      } else {
-        navigate("/products");
-      }
-    }
-  }}
->
-  {user?.role === "seller"
-    ? "← Back to Conversations"
-    : "← Back to Product"}
-</button>
+          type="button"
+          className="chat-back-button"
+          onClick={() => {
+            if (user?.role === "seller") {
+              navigate("/conversations");
+            } else {
+              if (productId) {
+                navigate(
+                  `/products/${productId}`
+                );
+              } else {
+                navigate("/products");
+              }
+            }
+          }}
+        >
+          <ArrowLeft
+            size={17}
+            strokeWidth={1.8}
+          />
+
+          <span>
+            {user?.role === "seller"
+              ? "Back to Conversations"
+              : "Back to Product"}
+          </span>
+        </button>
+
 
         {/* =========================
             HEADER
@@ -299,7 +343,8 @@ function Chat() {
                 message.sender?._id === user?.id;
 
               const isEditing =
-                editingMessageId === message._id;
+                editingMessageId ===
+                message._id;
 
               return (
 
@@ -333,6 +378,7 @@ function Chat() {
                           autoFocus
                         />
 
+
                         <div className="chat-edit-actions">
 
                           <button
@@ -352,6 +398,7 @@ function Chat() {
                               : "Save"}
                           </button>
 
+
                           <button
                             type="button"
                             onClick={
@@ -369,6 +416,7 @@ function Chat() {
                     ) : (
 
                       <>
+
                         {/* MESSAGE TEXT */}
 
                         <p>
@@ -409,9 +457,18 @@ function Chat() {
                                   message
                                 )
                               }
+                              aria-label="Edit message"
                             >
-                              ✏️ Edit
+                              <Pencil
+                                size={14}
+                                strokeWidth={1.8}
+                              />
+
+                              <span>
+                                Edit
+                              </span>
                             </button>
+
 
                             <button
                               type="button"
@@ -420,8 +477,16 @@ function Chat() {
                                   message._id
                                 )
                               }
+                              aria-label="Delete message"
                             >
-                              🗑️ Delete
+                              <Trash2
+                                size={14}
+                                strokeWidth={1.8}
+                              />
+
+                              <span>
+                                Delete
+                              </span>
                             </button>
 
                           </div>
@@ -463,6 +528,7 @@ function Chat() {
             placeholder="Type a message..."
           />
 
+
           <button
             type="submit"
             disabled={
@@ -470,11 +536,9 @@ function Chat() {
               !text.trim()
             }
           >
-
             {sending
               ? "Sending..."
               : "Send"}
-
           </button>
 
         </form>
@@ -486,3 +550,5 @@ function Chat() {
 }
 
 export default Chat;
+
+ 

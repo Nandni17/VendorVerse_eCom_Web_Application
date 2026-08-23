@@ -1,6 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import {
+  Laptop,
+  Footprints,
+  Gamepad2,
+  Watch,
+  Truck,
+  Lock,
+  Store,
+  ArrowRight,
+} from "lucide-react";
+
 import API from "../api/axios";
 import ProductCard from "../components/productCard";
 
@@ -86,8 +97,15 @@ function Home() {
   const currentBanner =
     banners[heroIndex];
 
-console.log("CURRENT BANNER:", currentBanner);
-console.log("CURRENT IMAGE:", currentBanner?.image);
+  console.log(
+    "CURRENT BANNER:",
+    currentBanner
+  );
+
+  console.log(
+    "CURRENT IMAGE:",
+    currentBanner?.image
+  );
 
   const trendingProducts =
     products.slice(0, 8);
@@ -110,6 +128,7 @@ console.log("CURRENT IMAGE:", currentBanner?.image);
         ) : currentBanner ? (
 
           <>
+
             <div className="hero-content">
 
               <p className="hero-eyebrow">
@@ -131,7 +150,11 @@ console.log("CURRENT IMAGE:", currentBanner?.image);
                   className="hero-primary-button"
                 >
                   {currentBanner.buttonText}
-                  {" "}→
+
+                  <ArrowRight
+                    size={18}
+                    strokeWidth={1.8}
+                  />
                 </Link>
 
                 <Link
@@ -142,6 +165,7 @@ console.log("CURRENT IMAGE:", currentBanner?.image);
                 </Link>
 
               </div>
+
 
               {/* Dots */}
 
@@ -176,18 +200,22 @@ console.log("CURRENT IMAGE:", currentBanner?.image);
 
               <div className="hero-glow"></div>
 
-              <div className="hero-card" key={currentBanner._id}>
+              <div
+                className="hero-card"
+                key={currentBanner._id}
+              >
 
-  <img
-    key={currentBanner._id}
-    src={currentBanner.image}
-    alt={currentBanner.title}
-    className="hero-banner-image"
-  />
+                <img
+                  key={currentBanner._id}
+                  src={currentBanner.image}
+                  alt={currentBanner.title}
+                  className="hero-banner-image"
+                />
 
-</div>
+              </div>
 
             </div>
+
           </>
 
         ) : (
@@ -207,7 +235,12 @@ console.log("CURRENT IMAGE:", currentBanner?.image);
               to="/products"
               className="hero-primary-button"
             >
-              Start Shopping →
+              Start Shopping
+
+              <ArrowRight
+                size={18}
+                strokeWidth={1.8}
+              />
             </Link>
 
           </div>
@@ -246,7 +279,13 @@ console.log("CURRENT IMAGE:", currentBanner?.image);
             to="/products"
             className="category-card"
           >
-            <span>💻</span>
+
+            <span>
+              <Laptop
+                size={30}
+                strokeWidth={1.8}
+              />
+            </span>
 
             <h3>
               Electronics
@@ -255,6 +294,7 @@ console.log("CURRENT IMAGE:", currentBanner?.image);
             <p>
               Smart tech & gadgets
             </p>
+
           </Link>
 
 
@@ -262,7 +302,13 @@ console.log("CURRENT IMAGE:", currentBanner?.image);
             to="/products"
             className="category-card"
           >
-            <span>👟</span>
+
+            <span>
+              <Footprints
+                size={30}
+                strokeWidth={1.8}
+              />
+            </span>
 
             <h3>
               Fashion
@@ -271,6 +317,7 @@ console.log("CURRENT IMAGE:", currentBanner?.image);
             <p>
               Style for every day
             </p>
+
           </Link>
 
 
@@ -278,7 +325,13 @@ console.log("CURRENT IMAGE:", currentBanner?.image);
             to="/products"
             className="category-card"
           >
-            <span>🎮</span>
+
+            <span>
+              <Gamepad2
+                size={30}
+                strokeWidth={1.8}
+              />
+            </span>
 
             <h3>
               Gaming
@@ -287,6 +340,7 @@ console.log("CURRENT IMAGE:", currentBanner?.image);
             <p>
               Level up your setup
             </p>
+
           </Link>
 
 
@@ -294,7 +348,13 @@ console.log("CURRENT IMAGE:", currentBanner?.image);
             to="/products"
             className="category-card"
           >
-            <span>⌚</span>
+
+            <span>
+              <Watch
+                size={30}
+                strokeWidth={1.8}
+              />
+            </span>
 
             <h3>
               Accessories
@@ -303,6 +363,7 @@ console.log("CURRENT IMAGE:", currentBanner?.image);
             <p>
               Small details, big impact
             </p>
+
           </Link>
 
         </div>
@@ -334,7 +395,12 @@ console.log("CURRENT IMAGE:", currentBanner?.image);
             to="/products"
             className="view-all-link"
           >
-            View all →
+            View all
+
+            <ArrowRight
+              size={17}
+              strokeWidth={1.8}
+            />
           </Link>
 
         </div>
@@ -396,7 +462,10 @@ console.log("CURRENT IMAGE:", currentBanner?.image);
           <div className="benefit-card">
 
             <div className="benefit-icon">
-              🚚
+              <Truck
+                size={30}
+                strokeWidth={1.8}
+              />
             </div>
 
             <h3>
@@ -414,7 +483,10 @@ console.log("CURRENT IMAGE:", currentBanner?.image);
           <div className="benefit-card">
 
             <div className="benefit-icon">
-              🔒
+              <Lock
+                size={30}
+                strokeWidth={1.8}
+              />
             </div>
 
             <h3>
@@ -432,7 +504,10 @@ console.log("CURRENT IMAGE:", currentBanner?.image);
           <div className="benefit-card">
 
             <div className="benefit-icon">
-              🏪
+              <Store
+                size={30}
+                strokeWidth={1.8}
+              />
             </div>
 
             <h3>
@@ -474,7 +549,12 @@ console.log("CURRENT IMAGE:", currentBanner?.image);
           to="/products"
           className="hero-primary-button"
         >
-          Start Shopping →
+          Start Shopping
+
+          <ArrowRight
+            size={18}
+            strokeWidth={1.8}
+          />
         </Link>
 
       </section>

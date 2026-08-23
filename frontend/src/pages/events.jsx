@@ -1,5 +1,12 @@
 import { Link } from "react-router-dom";
 
+import {
+  Gamepad2,
+  Shirt,
+  House,
+  Baby,
+} from "lucide-react";
+
 const events = [
   {
     id: 1,
@@ -8,7 +15,7 @@ const events = [
       "Discover the latest gadgets, gaming gear and smart technology from our sellers.",
     date: "August 20 – 27, 2026",
     category: "Technology",
-    icon: "🎮",
+    icon: Gamepad2,
   },
   {
     id: 2,
@@ -17,7 +24,7 @@ const events = [
       "Explore new arrivals in men's and women's fashion, shoes and accessories.",
     date: "September 2 – 9, 2026",
     category: "Fashion",
-    icon: "👗",
+    icon: Shirt,
   },
   {
     id: 3,
@@ -26,7 +33,7 @@ const events = [
       "Refresh your space with furniture, home decor and everyday essentials.",
     date: "September 15 – 22, 2026",
     category: "Home",
-    icon: "🏠",
+    icon: House,
   },
   {
     id: 4,
@@ -35,7 +42,7 @@ const events = [
       "Fun products, accessories and useful everyday finds for little ones.",
     date: "October 1 – 7, 2026",
     category: "Kids",
-    icon: "🧸",
+    icon: Baby,
   },
 ];
 
@@ -70,52 +77,55 @@ function Events() {
 
         <div className="events-grid">
 
-          {events.map((event) => (
+          {events.map((event) => {
 
-            <article
-              className="event-card"
-              key={event.id}
-            >
+            const EventIcon = event.icon;
 
-              <div className="event-card-top">
+            return (
+              <article
+                className="event-card"
+                key={event.id}
+              >
 
-                <div className="event-icon">
-                  {event.icon}
+                <div className="event-card-top">
+
+                  <div className="event-icon">
+                    <EventIcon size={28} strokeWidth={1.8} />
+                  </div>
+
+                  <span className="event-category">
+                    {event.category}
+                  </span>
+
                 </div>
 
-                <span className="event-category">
-                  {event.category}
-                </span>
 
-              </div>
+                <div className="event-content">
 
+                  <p className="event-date">
+                    {event.date}
+                  </p>
 
-              <div className="event-content">
+                  <h2>
+                    {event.title}
+                  </h2>
 
-                <p className="event-date">
-                  {event.date}
-                </p>
+                  <p>
+                    {event.description}
+                  </p>
 
-                <h2>
-                  {event.title}
-                </h2>
+                  <Link
+                    to="/products"
+                    className="event-button"
+                  >
+                    Explore Collection →
+                  </Link>
 
-                <p>
-                  {event.description}
-                </p>
+                </div>
 
-                <Link
-                  to="/products"
-                  className="event-button"
-                >
-                  Explore Collection →
-                </Link>
-
-              </div>
-
-            </article>
-
-          ))}
+              </article>
+            );
+          })}
 
         </div>
 

@@ -1,5 +1,13 @@
 import { Link } from "react-router-dom";
 
+// Centralized icons
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaTwitter,
+  Heart,
+} from "../icons";
+
 function Footer() {
   return (
     <footer className="site-footer">
@@ -79,7 +87,7 @@ function Footer() {
               rel="noreferrer"
               aria-label="Instagram"
             >
-              ◎
+              <FaInstagram size={20} />
             </a>
 
             <a
@@ -88,7 +96,7 @@ function Footer() {
               rel="noreferrer"
               aria-label="Facebook"
             >
-              f
+              <FaFacebookF size={20} />
             </a>
 
             <a
@@ -97,7 +105,7 @@ function Footer() {
               rel="noreferrer"
               aria-label="X"
             >
-              𝕏
+              <FaTwitter size={20} />
             </a>
 
           </div>
@@ -214,7 +222,7 @@ function Footer() {
         </div>
 
         <p>
-          Built with ❤️ for modern shopping.
+          Built with <Heart size={14} /> for modern shopping.
         </p>
 
       </section>

@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { MessageCircle, ArrowRight } from "lucide-react";
+
 import API from "../api/axios";
 import { AuthContext } from "../context/authContext";
 
@@ -54,9 +55,11 @@ function Conversations() {
   if (loading) {
     return (
       <main className="conversations-page">
+
         <div className="conversations-status">
           Loading conversations...
         </div>
+
       </main>
     );
   }
@@ -68,10 +71,19 @@ function Conversations() {
   if (error) {
     return (
       <main className="conversations-page">
+
         <div className="conversations-status">
-          <h2>Messages</h2>
-          <p>{error}</p>
+
+          <h2>
+            Messages
+          </h2>
+
+          <p>
+            {error}
+          </p>
+
         </div>
+
       </main>
     );
   }
@@ -85,7 +97,7 @@ function Conversations() {
 
         <div className="conversations-header">
 
-           <Link
+          <Link
             to="/seller"
             className="seller-orders-back"
           >
@@ -94,9 +106,18 @@ function Conversations() {
 
           <p className="section-eyebrow">
             SELLER CENTER
-          </p> 
+          </p>
 
-          <h1>💬 Messages</h1>
+          <h1 className="conversations-title">
+
+            <MessageCircle
+              size={32}
+              strokeWidth={1.8}
+            />
+
+            Messages
+
+          </h1>
 
           <p>
             Your conversations with buyers and sellers
@@ -112,7 +133,12 @@ function Conversations() {
           <div className="conversations-empty">
 
             <div className="empty-icon">
-              💬
+
+              <MessageCircle
+                size={42}
+                strokeWidth={1.5}
+              />
+
             </div>
 
             <h2>
@@ -132,12 +158,15 @@ function Conversations() {
             {conversations.map((conversation) => {
 
               // Find the other person
-              const currentUserId = user?.id || user?._id;
 
-const otherUser =
-  currentUserId === conversation.buyer?._id
-    ? conversation.seller
-    : conversation.buyer;
+              const currentUserId =
+                user?.id || user?._id;
+
+              const otherUser =
+                currentUserId ===
+                conversation.buyer?._id
+                  ? conversation.seller
+                  : conversation.buyer;
 
               return (
                 <div
@@ -155,9 +184,11 @@ const otherUser =
                   <div className="conversation-user">
 
                     <div className="conversation-avatar">
+
                       {otherUser?.name
                         ?.charAt(0)
                         ?.toUpperCase() || "U"}
+
                     </div>
 
                     <div className="conversation-info">
@@ -204,7 +235,12 @@ const otherUser =
                   {/* ARROW */}
 
                   <div className="conversation-arrow">
-                    →
+
+                    <ArrowRight
+                      size={20}
+                      strokeWidth={1.8}
+                    />
+
                   </div>
 
                 </div>

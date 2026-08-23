@@ -3,6 +3,15 @@ import { Link } from "react-router-dom";
 
 import API from "../api/axios";
 
+import {
+  Users,
+  Store,
+  Package,
+  Truck,
+  CreditCard,
+  Mail,
+} from "../icons";
+
 function AdminDashboard() {
   const [stats, setStats] = useState({
     totalUsers: 0,
@@ -52,7 +61,10 @@ function AdminDashboard() {
       <main className="admin-page">
         <div className="admin-status">
           <div className="loader"></div>
-          <p>Loading admin dashboard...</p>
+
+          <p>
+            Loading admin dashboard...
+          </p>
         </div>
       </main>
     );
@@ -62,8 +74,13 @@ function AdminDashboard() {
     return (
       <main className="admin-page">
         <div className="admin-status error">
-          <h2>Unable to load dashboard</h2>
-          <p>{error}</p>
+          <h2>
+            Unable to load dashboard
+          </h2>
+
+          <p>
+            {error}
+          </p>
         </div>
       </main>
     );
@@ -77,6 +94,7 @@ function AdminDashboard() {
       <section className="admin-header">
 
         <div>
+
           <p className="section-eyebrow">
             VENDORVERSE ADMIN
           </p>
@@ -89,6 +107,7 @@ function AdminDashboard() {
             Manage your marketplace, users,
             sellers, products and orders.
           </p>
+
         </div>
 
       </section>
@@ -120,6 +139,7 @@ function AdminDashboard() {
 
         <div className="admin-stat-card revenue">
           <span>Revenue</span>
+
           <strong>
             ₹
             {Number(
@@ -149,18 +169,26 @@ function AdminDashboard() {
           to="/admin/users"
           className="admin-action-card"
         >
+
           <span className="admin-action-icon">
-            👥
+            <Users
+              size={22}
+              strokeWidth={1.8}
+            />
           </span>
 
           <div>
-            <h3>Customers</h3>
+            <h3>
+              Customers
+            </h3>
+
             <p>
               View registered customers.
             </p>
           </div>
 
           <span>→</span>
+
         </Link>
 
 
@@ -168,18 +196,26 @@ function AdminDashboard() {
           to="/admin/sellers"
           className="admin-action-card"
         >
+
           <span className="admin-action-icon">
-            🏪
+            <Store
+              size={22}
+              strokeWidth={1.8}
+            />
           </span>
 
           <div>
-            <h3>Sellers</h3>
+            <h3>
+              Sellers
+            </h3>
+
             <p>
               View marketplace sellers.
             </p>
           </div>
 
           <span>→</span>
+
         </Link>
 
 
@@ -187,18 +223,26 @@ function AdminDashboard() {
           to="/admin/products"
           className="admin-action-card"
         >
+
           <span className="admin-action-icon">
-            📦
+            <Package
+              size={22}
+              strokeWidth={1.8}
+            />
           </span>
 
           <div>
-            <h3>Products</h3>
+            <h3>
+              Products
+            </h3>
+
             <p>
               Review marketplace products.
             </p>
           </div>
 
           <span>→</span>
+
         </Link>
 
 
@@ -206,18 +250,26 @@ function AdminDashboard() {
           to="/admin/orders"
           className="admin-action-card"
         >
+
           <span className="admin-action-icon">
-            🚚
+            <Truck
+              size={22}
+              strokeWidth={1.8}
+            />
           </span>
 
           <div>
-            <h3>Orders</h3>
+            <h3>
+              Orders
+            </h3>
+
             <p>
               Monitor all marketplace orders.
             </p>
           </div>
 
           <span>→</span>
+
         </Link>
 
 
@@ -225,42 +277,56 @@ function AdminDashboard() {
           to="/admin/payments"
           className="admin-action-card"
         >
+
           <span className="admin-action-icon">
-            💳
+            <CreditCard
+              size={22}
+              strokeWidth={1.8}
+            />
           </span>
 
           <div>
-            <h3>Payments</h3>
+            <h3>
+              Payments
+            </h3>
+
             <p>
               Review payment activity.
             </p>
           </div>
 
           <span>→</span>
+
         </Link>
 
+
         <Link
-  to="/admin/contacts"
-  className="admin-action-card"
->
-  <span className="admin-action-icon">
-    ✉
-  </span>
+          to="/admin/contacts"
+          className="admin-action-card"
+        >
 
-  <div>
-    <h3>
-      Contact Messages
-    </h3>
+          <span className="admin-action-icon">
+            <Mail
+              size={22}
+              strokeWidth={1.8}
+            />
+          </span>
 
-    <p>
-      View and manage customer messages.
-    </p>
-  </div>
+          <div>
+            <h3>
+              Contact Messages
+            </h3>
 
-  <span>
-    →
-  </span>
-</Link>
+            <p>
+              View and manage customer messages.
+            </p>
+          </div>
+
+          <span>
+            →
+          </span>
+
+        </Link>
 
       </section>
 

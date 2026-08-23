@@ -2,6 +2,11 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 
 import { WishlistContext } from "../context/wishlistContext";
+import {
+  Heart,
+  X,
+  ArrowRight,
+} from "../icons";
 
 function Wishlist() {
   const {
@@ -34,7 +39,7 @@ function Wishlist() {
         <div className="wishlist-empty">
 
           <div className="wishlist-empty-icon">
-            ♡
+            <Heart size={42} strokeWidth={1.5} />
           </div>
 
           <h2>
@@ -50,6 +55,7 @@ function Wishlist() {
             className="wishlist-shop-button"
           >
             Browse Products
+            <ArrowRight size={18} />
           </Link>
 
         </div>
@@ -105,6 +111,7 @@ function Wishlist() {
                     removeFromWishlist(product._id)
                   }
                 >
+                  <X size={16} />
                   Remove
                 </button>
 

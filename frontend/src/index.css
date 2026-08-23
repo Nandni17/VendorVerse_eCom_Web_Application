@@ -1114,6 +1114,12 @@ button {
   margin-bottom: 35px;
 }
 
+.account-icon-large svg,
+.card-icon svg,
+.option-icon svg {
+  stroke-width: 2;
+}
+
 .account-icon-large {
   width: 75px;
   height: 75px;
@@ -4308,6 +4314,19 @@ overflow: hidden;
   margin: 30px 0;
 }
 
+.success-info strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.success-primary-button,
+.success-secondary-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .success-info div {
   padding: 18px;
 
@@ -5885,6 +5904,14 @@ overflow: hidden;
   flex-wrap: wrap;
 
   margin-top: 30px;
+}
+
+.payment-primary-button,
+.payment-secondary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .payment-primary-button,

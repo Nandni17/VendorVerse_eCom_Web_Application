@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import {
+  ArrowLeft,
+  Mail,
+  Trash2,
+  Check,
+  Eye,
+  EyeOff,
+} from "../icons";
+
 import API from "../api/axios";
 
 function AdminContacts() {
@@ -9,11 +18,15 @@ function AdminContacts() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // ==========================================
+  // FETCH CONTACT MESSAGES
+  // ==========================================
+
   const fetchMessages = async () => {
     try {
       setLoading(true);
       setError("");
-          "/api/admin/contacts"
+
       const response = await API.get(
         "/api/admin/contacts"
       );
@@ -124,13 +137,17 @@ function AdminContacts() {
   if (loading) {
     return (
       <main className="admin-page">
+
         <div className="admin-status">
+
           <div className="loader"></div>
 
           <p>
             Loading contact messages...
           </p>
+
         </div>
+
       </main>
     );
   }
@@ -138,7 +155,9 @@ function AdminContacts() {
   return (
     <main className="admin-page">
 
-      {/* HEADER */}
+      {/* ==========================================
+          HEADER
+      ========================================== */}
 
       <section className="admin-header">
 
@@ -148,16 +167,26 @@ function AdminContacts() {
             to="/admin"
             className="admin-back-link"
           >
-            ← Admin Dashboard
+            <ArrowLeft
+              size={17}
+              strokeWidth={1.8}
+            />
+
+            <span>
+              Admin Dashboard
+            </span>
           </Link>
+
 
           <p className="section-eyebrow">
             ADMIN • CONTACT
           </p>
 
+
           <h1>
             Contact Messages
           </h1>
+
 
           <p>
             Review messages sent by VendorVerse
@@ -169,7 +198,9 @@ function AdminContacts() {
       </section>
 
 
-      {/* ERROR */}
+      {/* ==========================================
+          ERROR
+      ========================================== */}
 
       {error && (
         <div className="admin-error">
@@ -178,28 +209,47 @@ function AdminContacts() {
       )}
 
 
-      {/* CONTENT */}
+      {/* ==========================================
+          CONTENT
+      ========================================== */}
 
       <section className="admin-contact-list">
 
         {messages.length === 0 ? (
 
+          /* ======================================
+             EMPTY STATE
+          ====================================== */
+
           <div className="admin-empty">
+
             <div className="admin-contact-empty-icon">
-              ✉
+
+              <Mail
+                size={32}
+                strokeWidth={1.5}
+              />
+
             </div>
+
 
             <h2>
               No messages yet
             </h2>
 
+
             <p>
               Customer contact messages will
               appear here.
             </p>
+
           </div>
 
         ) : (
+
+          /* ======================================
+             MESSAGES
+          ====================================== */
 
           messages.map((message) => (
 
@@ -212,7 +262,9 @@ function AdminContacts() {
               }`}
             >
 
-              {/* TOP */}
+              {/* ==================================
+                  TOP
+              ================================== */}
 
               <div className="admin-contact-top">
 
@@ -222,17 +274,26 @@ function AdminContacts() {
                     {message.name}
                   </div>
 
+
                   <a
                     href={`mailto:${message.email}`}
                     className="admin-contact-email"
                   >
-                    {message.email}
+                    <Mail
+                      size={14}
+                      strokeWidth={1.8}
+                    />
+
+                    <span>
+                      {message.email}
+                    </span>
                   </a>
 
                 </div>
 
 
                 <div className="admin-contact-date">
+
                   {message.createdAt
                     ? new Date(
                         message.createdAt
@@ -245,12 +306,15 @@ function AdminContacts() {
                         }
                       )
                     : ""}
+
                 </div>
 
               </div>
 
 
-              {/* SUBJECT */}
+              {/* ==================================
+                  SUBJECT
+              ================================== */}
 
               <div className="admin-contact-subject">
 
@@ -265,7 +329,9 @@ function AdminContacts() {
               </div>
 
 
-              {/* MESSAGE */}
+              {/* ==================================
+                  MESSAGE
+              ================================== */}
 
               <div className="admin-contact-message">
 
@@ -276,7 +342,9 @@ function AdminContacts() {
               </div>
 
 
-              {/* ACTIONS */}
+              {/* ==================================
+                  ACTIONS
+              ================================== */}
 
               <div className="admin-contact-footer">
 
@@ -291,6 +359,8 @@ function AdminContacts() {
 
                 <div className="admin-contact-actions">
 
+                  {/* READ / UNREAD */}
+
                   <button
                     type="button"
                     className="admin-contact-read-button"
@@ -301,11 +371,36 @@ function AdminContacts() {
                       )
                     }
                   >
-                    {message.status === "unread"
-                      ? "Mark as Read"
-                      : "Mark as Unread"}
+
+                    {message.status ===
+                    "unread" ? (
+                      <>
+                        <Eye
+                          size={16}
+                          strokeWidth={1.8}
+                        />
+
+                        <span>
+                          Mark as Read
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <EyeOff
+                          size={16}
+                          strokeWidth={1.8}
+                        />
+
+                        <span>
+                          Mark as Unread
+                        </span>
+                      </>
+                    )}
+
                   </button>
 
+
+                  {/* DELETE */}
 
                   <button
                     type="button"
@@ -316,7 +411,16 @@ function AdminContacts() {
                       )
                     }
                   >
-                    Delete
+
+                    <Trash2
+                      size={16}
+                      strokeWidth={1.8}
+                    />
+
+                    <span>
+                      Delete
+                    </span>
+
                   </button>
 
                 </div>

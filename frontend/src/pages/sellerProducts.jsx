@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import {
+  Package,
+  Plus,
+  Pencil,
+  Trash2,
+  ArrowLeft,
+  Star,
+} from "../icons";
+
 import API from "../api/axios";
 
 function SellerProducts() {
@@ -36,37 +45,36 @@ function SellerProducts() {
   }, []);
 
   const handleDelete = async (productId) => {
-  const confirmed = window.confirm(
-    "Are you sure you want to delete this product?"
-  );
-
-  if (!confirmed) {
-    return;
-  }
-
-  try {
-    await API.delete(`/api/products/${productId}`);
-
-    // Remove from UI immediately
-    setProducts((prevProducts) =>
-      prevProducts.filter(
-        (product) =>
-          product._id !== productId
-      )
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this product?"
     );
 
-  } catch (err) {
-    console.error(
-      "Delete product error:",
-      err
-    );
+    if (!confirmed) {
+      return;
+    }
 
-    alert(
-      err.response?.data?.message ||
-        "Unable to delete product."
-    );
-  }
-};
+    try {
+      await API.delete(`/api/products/${productId}`);
+
+      // Remove from UI immediately
+      setProducts((prevProducts) =>
+        prevProducts.filter(
+          (product) =>
+            product._id !== productId
+        )
+      );
+    } catch (err) {
+      console.error(
+        "Delete product error:",
+        err
+      );
+
+      alert(
+        err.response?.data?.message ||
+          "Unable to delete product."
+      );
+    }
+  };
 
   // =========================
   // LOADING
@@ -133,11 +141,18 @@ function SellerProducts() {
 
         <div>
 
-            <Link
+          <Link
             to="/seller"
             className="seller-orders-back"
           >
-            ← Seller Dashboard
+            <ArrowLeft
+              size={18}
+              strokeWidth={1.8}
+            />
+
+            <span>
+              Seller Dashboard
+            </span>
           </Link>
 
           <p className="section-eyebrow">
@@ -155,12 +170,18 @@ function SellerProducts() {
 
         </div>
 
-
         <Link
           to="/seller/products/add"
           className="seller-add-product-button"
         >
-          + Add Product
+          <Plus
+            size={18}
+            strokeWidth={1.8}
+          />
+
+          <span>
+            Add Product
+          </span>
         </Link>
 
       </section>
@@ -191,7 +212,10 @@ function SellerProducts() {
         <div className="seller-products-empty">
 
           <div className="seller-empty-icon">
-            📦
+            <Package
+              size={40}
+              strokeWidth={1.5}
+            />
           </div>
 
           <h2>
@@ -207,7 +231,14 @@ function SellerProducts() {
             to="/seller/products/add"
             className="seller-add-product-button"
           >
-            Add Your First Product
+            <Plus
+              size={18}
+              strokeWidth={1.8}
+            />
+
+            <span>
+              Add Your First Product
+            </span>
           </Link>
 
         </div>
@@ -345,8 +376,15 @@ function SellerProducts() {
 
                       <span className="seller-rating">
 
-                        ⭐{" "}
-                        {product.rating || 0}
+                        <Star
+                          size={16}
+                          strokeWidth={1.8}
+                          fill="currentColor"
+                        />
+
+                        <span>
+                          {product.rating || 0}
+                        </span>
 
                         <small>
                           (
@@ -370,16 +408,34 @@ function SellerProducts() {
                           to={`/seller/products/edit/${product._id}`}
                           className="seller-edit-button"
                         >
-                          Edit
+                          <Pencil
+                            size={16}
+                            strokeWidth={1.8}
+                          />
+
+                          <span>
+                            Edit
+                          </span>
                         </Link>
 
                         <button
-  type="button"
-  className="seller-delete-button"
-  onClick={() => handleDelete(product._id)}
->
-  Delete
-</button>
+                          type="button"
+                          className="seller-delete-button"
+                          onClick={() =>
+                            handleDelete(
+                              product._id
+                            )
+                          }
+                        >
+                          <Trash2
+                            size={16}
+                            strokeWidth={1.8}
+                          />
+
+                          <span>
+                            Delete
+                          </span>
+                        </button>
 
                       </div>
 

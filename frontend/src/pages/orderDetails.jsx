@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 
 import API from "../api/axios";
+import { ArrowLeft, Check } from "../icons";
 
 function OrderDetails() {
   const { id } = useParams();
@@ -69,7 +70,8 @@ function OrderDetails() {
             to="/orders"
             className="orders-shop-button"
           >
-            ← Back to Orders
+            <ArrowLeft size={18} />
+            Back to Orders
           </Link>
 
         </div>
@@ -86,7 +88,8 @@ function OrderDetails() {
           to="/orders"
           className="back-orders-link"
         >
-          ← Back to Orders
+          <ArrowLeft size={18} />
+          Back to Orders
         </Link>
 
         <p className="section-eyebrow">
@@ -190,7 +193,9 @@ function OrderDetails() {
             <div className="order-timeline">
 
               <div className="timeline-step active">
-                <span>✓</span>
+                <span>
+                  <Check size={16} />
+                </span>
 
                 <div>
                   <strong>
@@ -213,7 +218,9 @@ function OrderDetails() {
                     : ""
                 }`}
               >
-                <span>✓</span>
+                <span>
+                  <Check size={16} />
+                </span>
 
                 <div>
                   <strong>
@@ -236,7 +243,9 @@ function OrderDetails() {
                     : ""
                 }`}
               >
-                <span>✓</span>
+                <span>
+                  <Check size={16} />
+                </span>
 
                 <div>
                   <strong>
@@ -258,7 +267,9 @@ function OrderDetails() {
                     : ""
                 }`}
               >
-                <span>✓</span>
+                <span>
+                  <Check size={16} />
+                </span>
 
                 <div>
                   <strong>

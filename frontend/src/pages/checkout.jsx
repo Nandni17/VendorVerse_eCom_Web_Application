@@ -1,11 +1,19 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import {
+  CreditCard,
+  DollarSign,
+  Shield,
+} from "../icons";
+
 import { CartContext } from "../context/cartContext";
 import API from "../api/axios";
 
 function Checkout() {
- const { cart, clearCart } = useContext(CartContext);
+  const { cart, clearCart } =
+    useContext(CartContext);
+
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -17,10 +25,19 @@ function Checkout() {
     postalCode: "",
   });
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [loading, setLoading] =
+    useState(false);
 
-  const [paymentMethod, setPaymentMethod] = useState("stripe");
+  const [error, setError] =
+    useState("");
+
+  const [paymentMethod, setPaymentMethod] =
+    useState("stripe");
+
+
+  // =========================
+  // HANDLE INPUT
+  // =========================
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,114 +48,179 @@ function Checkout() {
     }));
   };
 
+
+  // =========================
+  // TOTAL
+  // =========================
+
   const total = cart.reduce(
-    (sum, item) => sum + Number(item.price) * item.quantity,
+    (sum, item) =>
+      sum +
+      Number(item.price) *
+        item.quantity,
     0
   );
 
+
   // =========================
-  // STRIPE PAYMENT
+  // CHECKOUT
   // =========================
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-  console.log("🔥 PAY BUTTON CLICKED");
-  console.log("🛒 CART:", cart);
+    console.log(
+      "PAY BUTTON CLICKED"
+    );
+
+    console.log(
+      "CART:",
+      cart
+    );
 
     try {
       setLoading(true);
       setError("");
 
-      // Convert cart into the format expected by backend
-      const orderItems = cart.map((item) => ({
-        product: item._id,
-        quantity: item.quantity,
-      }));
 
-     
-    // =========================
-    // COD
-    // =========================
+      // =========================
+      // ORDER ITEMS
+      // =========================
 
-    if (paymentMethod === "cod") {
-      const response = await API.post(
-        "/api/orders",
-        {
-          orderItems,
-          paymentMethod: "cod",
-        }
+      const orderItems = cart.map(
+        (item) => ({
+          product: item._id,
+          quantity: item.quantity,
+        })
       );
 
-      console.log("COD order created:", response.data);
 
-// Clear cart after successful COD order
-clearCart();
+      // =========================
+      // COD
+      // =========================
 
-navigate("/orders");
+      if (
+        paymentMethod === "cod"
+      ) {
+        const response =
+          await API.post(
+            "/api/orders",
+            {
+              orderItems,
+              paymentMethod: "cod",
+            }
+          );
 
-return;
-    }
+        console.log(
+          "COD order created:",
+          response.data
+        );
 
-      console.log("Sending order items:", orderItems);
 
-       // =========================
-    // STRIPE
-    // =========================
-       const response = await API.post(
-      "/api/payment/create-checkout-session",
-      {
-        orderItems,
+        // Clear cart after
+        // successful COD order
+
+        clearCart();
+
+        navigate("/orders");
+
+        return;
       }
+
+
+      // =========================
+      // STRIPE
+      // =========================
+
+      console.log(
+        "Sending order items:",
+        orderItems
       );
 
-      console.log("Stripe response:", response.data);
+      const response =
+        await API.post(
+          "/api/payment/create-checkout-session",
+          {
+            orderItems,
+          }
+        );
+
+      console.log(
+        "Stripe response:",
+        response.data
+      );
+
 
       // Stripe Checkout URL
-      const stripeUrl = response.data.url;
+
+      const stripeUrl =
+        response.data.url;
 
       if (!stripeUrl) {
-        throw new Error("Stripe checkout URL was not returned.");
+        throw new Error(
+          "Stripe checkout URL was not returned."
+        );
       }
 
-     console.log("🚀 REDIRECTING TO:", response.data.url);
+
+      console.log(
+        "REDIRECTING TO:",
+        stripeUrl
+      );
+
 
       // Redirect to Stripe
-      window.location.href = stripeUrl;
+
+      window.location.href =
+        stripeUrl;
 
     } catch (err) {
-      console.error("Checkout error:", err);
+      console.error(
+        "Checkout error:",
+        err
+      );
 
       setError(
-        err.response?.data?.message ||
-        err.response?.data?.error ||
-        err.message ||
-        "Unable to start payment."
+        err.response?.data
+          ?.message ||
+          err.response?.data
+            ?.error ||
+          err.message ||
+          "Unable to start payment."
       );
 
       setLoading(false);
     }
   };
 
+
   // =========================
   // EMPTY CART
   // =========================
 
-  if (!cart || cart.length === 0) {
+  if (
+    !cart ||
+    cart.length === 0
+  ) {
     return (
       <main className="checkout-page">
 
         <div className="checkout-empty">
 
-          <h1>Your Cart is Empty</h1>
+          <h1>
+            Your Cart is Empty
+          </h1>
 
           <p>
-            Add some products before proceeding to checkout.
+            Add some products before
+            proceeding to checkout.
           </p>
 
           <button
             type="button"
-            onClick={() => navigate("/products")}
+            onClick={() =>
+              navigate("/products")
+            }
             className="checkout-shop-button"
           >
             Continue Shopping
@@ -150,10 +232,13 @@ return;
     );
   }
 
+
   return (
     <main className="checkout-page">
 
-      {/* HEADER */}
+      {/* =========================
+          HEADER
+      ========================= */}
 
       <div className="checkout-header">
 
@@ -162,17 +247,21 @@ return;
         </p>
 
         <h1>
-          Complete Your <span>Order</span>
+          Complete Your{" "}
+          <span>Order</span>
         </h1>
 
         <p>
-          Enter your details and continue to secure payment.
+          Enter your details and
+          continue to secure payment.
         </p>
 
       </div>
 
 
-      {/* ERROR */}
+      {/* =========================
+          ERROR
+      ========================= */}
 
       {error && (
         <div className="checkout-error">
@@ -193,7 +282,10 @@ return;
             Shipping Information
           </h2>
 
-          <form onSubmit={handleSubmit}>
+
+          <form
+            onSubmit={handleSubmit}
+          >
 
             {/* NAME */}
 
@@ -306,7 +398,9 @@ return;
                 <input
                   type="text"
                   name="postalCode"
-                  value={formData.postalCode}
+                  value={
+                    formData.postalCode
+                  }
                   onChange={handleChange}
                   placeholder="74000"
                   required
@@ -316,70 +410,141 @@ return;
 
             </div>
 
-{/* =========================
-    PAYMENT METHOD
-========================= */}
 
-<div className="payment-method-section">
+            {/* =========================
+                PAYMENT METHOD
+            ========================= */}
 
-  <h3>
-    Payment Method
-  </h3>
+            <div className="payment-method-section">
 
-  <label className="payment-option">
-
-    <input
-      type="radio"
-      name="paymentMethod"
-      value="stripe"
-      checked={paymentMethod === "stripe"}
-      onChange={(e) =>
-        setPaymentMethod(e.target.value)
-      }
-    />
-
-    <span>
-      💳 Pay with Stripe
-    </span>
-
-  </label>
+              <h3>
+                Payment Method
+              </h3>
 
 
-  <label className="payment-option">
+              {/* STRIPE */}
 
-    <input
-      type="radio"
-      name="paymentMethod"
-      value="cod"
-      checked={paymentMethod === "cod"}
-      onChange={(e) =>
-        setPaymentMethod(e.target.value)
-      }
-    />
+              <label className="payment-option">
 
-    <span>
-      💵 Cash on Delivery
-    </span>
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="stripe"
+                  checked={
+                    paymentMethod ===
+                    "stripe"
+                  }
+                  onChange={(e) =>
+                    setPaymentMethod(
+                      e.target.value
+                    )
+                  }
+                />
 
-  </label>
+                <span className="payment-option-content">
 
-</div>
+                  <CreditCard
+                    size={18}
+                    strokeWidth={1.8}
+                  />
 
-            {/* PAY BUTTON */}
+                  <span>
+                    Pay with Stripe
+                  </span>
+
+                </span>
+
+              </label>
+
+
+              {/* COD */}
+
+              <label className="payment-option">
+
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="cod"
+                  checked={
+                    paymentMethod ===
+                    "cod"
+                  }
+                  onChange={(e) =>
+                    setPaymentMethod(
+                      e.target.value
+                    )
+                  }
+                />
+
+                <span className="payment-option-content">
+
+                  <DollarSign
+                    size={18}
+                    strokeWidth={1.8}
+                  />
+
+                  <span>
+                    Cash on Delivery
+                  </span>
+
+                </span>
+
+              </label>
+
+            </div>
+
+
+            {/* =========================
+                PAY BUTTON
+            ========================= */}
 
             <button
-  type="submit"
-  className="place-order-button"
-  disabled={loading}
->
-  {loading
-    ? paymentMethod === "cod"
-      ? "Placing Order..."
-      : "Redirecting to Stripe..."
-    : paymentMethod === "cod"
-      ? "💵 Place COD Order"
-      : "💳 Pay with Stripe"}
-</button>
+              type="submit"
+              className="place-order-button"
+              disabled={loading}
+            >
+
+              {loading ? (
+
+                paymentMethod ===
+                "cod"
+                  ? "Placing Order..."
+                  : "Redirecting to Stripe..."
+
+              ) : (
+
+                <>
+
+                  {paymentMethod ===
+                  "cod" ? (
+                    <>
+                      <DollarSign
+                        size={18}
+                        strokeWidth={1.8}
+                      />
+
+                      <span>
+                        Place COD Order
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <CreditCard
+                        size={18}
+                        strokeWidth={1.8}
+                      />
+
+                      <span>
+                        Pay with Stripe
+                      </span>
+                    </>
+                  )}
+
+                </>
+
+              )}
+
+            </button>
 
           </form>
 
@@ -411,6 +576,7 @@ return;
                   alt={item.name}
                 />
 
+
                 <div className="checkout-product-info">
 
                   <h3>
@@ -418,16 +584,21 @@ return;
                   </h3>
 
                   <p>
-                    Quantity: {item.quantity}
+                    Quantity:{" "}
+                    {item.quantity}
                   </p>
 
                 </div>
 
+
                 <strong>
                   ₹
                   {(
-                    Number(item.price) * item.quantity
-                  ).toLocaleString("en-IN")}
+                    Number(item.price) *
+                    item.quantity
+                  ).toLocaleString(
+                    "en-IN"
+                  )}
                 </strong>
 
               </div>
@@ -437,6 +608,8 @@ return;
           </div>
 
 
+          {/* TOTAL */}
+
           <div className="checkout-total">
 
             <span>
@@ -444,15 +617,27 @@ return;
             </span>
 
             <strong>
-              ₹{total.toLocaleString("en-IN")}
+              ₹
+              {total.toLocaleString(
+                "en-IN"
+              )}
             </strong>
 
           </div>
 
 
+          {/* SECURE CHECKOUT */}
+
           <div className="secure-checkout">
 
-            🔒 Secure Checkout
+            <Shield
+              size={17}
+              strokeWidth={1.8}
+            />
+
+            <span>
+              Secure Checkout
+            </span>
 
           </div>
 
